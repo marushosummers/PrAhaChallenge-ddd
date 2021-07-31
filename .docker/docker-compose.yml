@@ -1,5 +1,16 @@
 version: '3.7'
 services:
+  app:
+    image: node:16
+    environment:
+        - DEBUG=app:*
+    tty: true
+    ports:
+        - "3000:3000"
+    volumes:
+        - ../backend:/app
+        -  /app/node_modules
+    working_dir: /app
   prisma-db:
     container_name: prisma-db
     image: postgres:12
