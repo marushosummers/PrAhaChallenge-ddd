@@ -1,7 +1,8 @@
 version: '3.7'
 services:
-  app:
-    image: node:16
+  backend:
+    image: node:12
+    platform: linux/arm64
     environment:
         - DEBUG=app:*
     tty: true
@@ -9,7 +10,6 @@ services:
         - "3000:3000"
     volumes:
         - ../backend:/app
-        -  /app/node_modules
     working_dir: /app
   prisma-db:
     container_name: prisma-db
