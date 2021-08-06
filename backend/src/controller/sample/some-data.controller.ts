@@ -37,3 +37,16 @@ export class SampleController {
     })
   }
 }
+
+@Controller({
+  path: '/sample2',
+})
+export class Sample2Controller {
+  // memo: @ApiResponseを定義しておかないとSwaggerに出力されない
+  @Get()
+  @ApiResponse({ status: 200, type: Object })
+  async getSomeData(): Promise<Object> {
+    return { sample: ["hogehoge"] }
+  }
+
+}
