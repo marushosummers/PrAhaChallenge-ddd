@@ -1,5 +1,5 @@
-import { SomeData } from 'src/domain/sample/entity/some-data'
+import { Team } from 'src/domain/entities/Team'
 
-export interface ISomeDataRepository {
-  save(someData: SomeData): Promise<SomeData>
+export interface ITeamRepository {
+  save(team: Team): Promise<Team>
 }

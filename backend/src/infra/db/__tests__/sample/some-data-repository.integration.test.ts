@@ -1,31 +1,30 @@
-import { SomeData } from 'src/domain/sample/entity/some-data'
+import { Team } from 'src/domain/entities/Team'
 import { createRandomIdString } from 'src/util/random'
 import { prisma } from '@testUtil/prisma'
-import { SomeDataRepository } from '../../repository/sample/some-data-repository'
+import { TeamRepository } from '../../repository/sample/some-data-repository'
 
 describe('some-data-repository.integration.ts', () => {
-  const someDataRepo = new SomeDataRepository(prisma)
+  const teamRepo = new TeamRepository(prisma)
   beforeAll(async () => {
-    await prisma.someData.deleteMany({})
+    await prisma.team.deleteMany({})
   })
   afterAll(async () => {
     await prisma.$disconnect()
   })
   describe('save', () => {
     afterEach(async () => {
-      await prisma.someData.deleteMany({})
+      await prisma.team.deleteMany({})
     })
-    it('[正常系]someDataを保存できる', async () => {
-      const someDataExpected = {
-        id: createRandomIdString(),
-        required: false,
-        number: 1,
+    it('[正常系]teamを保存できる', async () => {
+      const teamExpected = {
+        id: 1,
+        name: 'test'
       }
-      await someDataRepo.save(new SomeData(someDataExpected))
+      await teamRepo.save(new Team(teamExpected))
 
-      const allSomeDatas = await prisma.someData.findMany({})
-      expect(allSomeDatas).toHaveLength(1)
-      expect(allSomeDatas[0]).toEqual(someDataExpected)
+      const allTeams = await prisma.team.findMany({})
+      expect(allTeams).toHaveLength(1)
+      expect(allTeams[0]).toEqual(teamExpected)
     })
   })
 })

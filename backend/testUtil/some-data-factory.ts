@@ -1,21 +1,19 @@
 import * as faker from 'faker'
-import { SomeData } from 'src/domain/sample/entity/some-data'
+import { Team } from 'src/domain/entities/Team'
 import { prisma } from '@testUtil/prisma'
 
-export const seedSomeData = async (params: {
-  id?: string
-  required?: boolean
-  number?: number
+export const seedTeam = async (params: {
+  id?: number
+  name?: string
 }) => {
-  const { id, required, number } = params
-  const someDataEntity = new SomeData({
-    id: id ?? faker.random.uuid(),
-    required: required ?? true,
-    number: number ?? 1,
+  const { id, name } = params
+  const teamEntity = new Team({
+    id: id ?? 1,
+    name: name ?? "hoge",
   })
-  await prisma.someData.create({
+  await prisma.team.create({
     data: {
-      ...someDataEntity.getAllProperties(),
+      ...teamEntity.getAllProperties(),
     },
   })
 }

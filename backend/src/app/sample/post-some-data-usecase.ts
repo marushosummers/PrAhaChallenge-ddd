@@ -1,20 +1,19 @@
-import { SomeData } from 'src/domain/sample/entity/some-data'
+import { Team } from 'src/domain/entities/Team'
 import { createRandomIdString } from 'src/util/random'
-import { ISomeDataRepository } from './repository-interface/some-data-repository'
+import { ITeamRepository } from './repository-interface/some-data-repository'
 
-export class PostSomeDataUseCase {
-  private readonly someDataRepo: ISomeDataRepository
-  public constructor(someDataRepo: ISomeDataRepository) {
-    this.someDataRepo = someDataRepo
+export class PostTeamUseCase {
+  private readonly teamRepo: ITeamRepository
+  public constructor(teamRepo: ITeamRepository) {
+    this.teamRepo = teamRepo
   }
-  public async do(params: { required: boolean; number: number }) {
-    const { required, number } = params
+  public async do(params: { name: string }) {
+    const { name } = params
 
-    const someDataEntity = new SomeData({
-      id: createRandomIdString(),
-      required,
-      number,
+    const teamEntity = new Team({
+      id: 1,
+      name
     })
-    await this.someDataRepo.save(someDataEntity)
+    await this.teamRepo.save(teamEntity)
   }
 }

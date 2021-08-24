@@ -1,26 +1,25 @@
 import { PrismaClient } from '@prisma/client'
-import { ISomeDataRepository } from 'src/app/sample/repository-interface/some-data-repository'
-import { SomeData } from 'src/domain/sample/entity/some-data'
+import { ITeamRepository } from 'src/app/sample/repository-interface/some-data-repository'
+import { Team } from 'src/domain/entities/Team'
 
-export class SomeDataRepository implements ISomeDataRepository {
+export class TeamRepository implements ITeamRepository {
   private prismaClient: PrismaClient
   public constructor(prismaClient: PrismaClient) {
     this.prismaClient = prismaClient
   }
 
-  public async save(someDataEntity: SomeData): Promise<SomeData> {
-    const { id, required, number } = someDataEntity.getAllProperties()
+  public async save(TeamEntity: Team): Promise<Team> {
+    const { id, name } = TeamEntity.getAllProperties()
 
-    const savedSomeDataDatamodel = await this.prismaClient.someData.create({
+    const savedTeamDatamodel = await this.prismaClient.team.create({
       data: {
         id,
-        required,
-        number,
+        name,
       },
     })
-    const savedSomeDataEntity = new SomeData({
-      ...savedSomeDataDatamodel,
+    const savedTeamEntity = new Team({
+      ...savedTeamDatamodel,
     })
-    return savedSomeDataEntity
+    return savedTeamEntity
   }
 }

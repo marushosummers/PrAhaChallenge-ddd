@@ -1,21 +1,21 @@
 import { PrismaClient } from '@prisma/client'
 import {
-  SomeDataDTO,
-  ISomeDataQS,
+  TeamDTO,
+  ITeamQS,
 } from 'src/app/sample/query-service-interface/some-data-qs'
 
-export class SomeDataQS implements ISomeDataQS {
+export class TeamQS implements ITeamQS {
   private prismaClient: PrismaClient
   public constructor(prismaClient: PrismaClient) {
     this.prismaClient = prismaClient
   }
 
-  public async getAll(): Promise<SomeDataDTO[]> {
-    const allSomeDatas = await this.prismaClient.someData.findMany()
-    return allSomeDatas.map(
-      (someDataDM) =>
-        new SomeDataDTO({
-          ...someDataDM,
+  public async getAll(): Promise<TeamDTO[]> {
+    const allTeams = await this.prismaClient.team.findMany()
+    return allTeams.map(
+      (TeamDM) =>
+        new TeamDTO({
+          ...TeamDM,
         }),
     )
   }

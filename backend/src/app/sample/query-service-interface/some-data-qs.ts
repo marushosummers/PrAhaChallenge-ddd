@@ -1,15 +1,12 @@
-export class SomeDataDTO {
-  public readonly id: string
-  public readonly required: boolean
-  public readonly number: number
-  public constructor(props: { id: string; required: boolean; number: number }) {
-    const { id, required, number } = props
+export class TeamDTO {
+  public readonly id: number
+  public readonly name: string
+  public constructor(props: { id: number, name: string }) {
+    const { id, name } = props
     this.id = id
-    this.required = required
-    this.number = number
+    this.name = name
   }
 }
-
-export interface ISomeDataQS {
-  getAll(): Promise<SomeDataDTO[]>
+export interface ITeamQS {
+  getAll(): Promise<TeamDTO[]>
 }

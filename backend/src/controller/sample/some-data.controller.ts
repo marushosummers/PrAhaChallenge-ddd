@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
-import { GetSomeDataResponse } from './response/get-some-data-response'
-import { PostSomeDataRequest } from './request/post-some-data-request'
-import { GetSomeDataUseCase } from '../../app/sample/get-some-data-usecase'
-import { PostSomeDataUseCase } from '../../app/sample/post-some-data-usecase'
-import { SomeDataRepository } from 'src/infra/db/repository/sample/some-data-repository'
+import { GetTeamResponse } from './response/get-some-data-response'
+import { PostTeamRequest } from './request/post-some-data-request'
+import { GetTeamUseCase } from '../../app/sample/get-some-data-usecase'
+import { PostTeamUseCase } from '../../app/sample/post-some-data-usecase'
+import { TeamRepository } from 'src/infra/db/repository/sample/some-data-repository'
 import { PrismaClient } from '@prisma/client'
-import { SomeDataQS } from 'src/infra/db/query-service/sample/some-data-qs'
+import { TeamQS } from 'src/infra/db/query-service/sample/some-data-qs'
 
 @Controller({
   path: '/sample',
@@ -14,39 +14,37 @@ import { SomeDataQS } from 'src/infra/db/query-service/sample/some-data-qs'
 export class SampleController {
   // memo: @ApiResponseを定義しておかないとSwaggerに出力されない
   @Get()
-  @ApiResponse({ status: 200, type: GetSomeDataResponse })
-  async getSomeData(): Promise<GetSomeDataResponse> {
+  @ApiResponse({ status: 200, type: GetTeamResponse })
+  async getTeam(): Promise<GetTeamResponse> {
     const prisma = new PrismaClient()
-    const qs = new SomeDataQS(prisma)
-    const usecase = new GetSomeDataUseCase(qs)
+    const qs = new TeamQS(prisma)
+    const usecase = new GetTeamUseCase(qs)
     const result = await usecase.do()
-    const response = new GetSomeDataResponse({ someDatas: result })
+    const response = new GetTeamResponse({ someDatas: result })
     return response
   }
 
   @Post()
-  async postSomeData(
-    @Body() postSomeDataDto: PostSomeDataRequest,
+  async postTeam(
+    @Body() postTeamDto: PostTeamRequest,
   ): Promise<void> {
     const prisma = new PrismaClient()
-    const repo = new SomeDataRepository(prisma)
-    const usecase = new PostSomeDataUseCase(repo)
+    const repo = new TeamRepository(prisma)
+    const usecase = new PostTeamUseCase(repo)
     await usecase.do({
-      required: postSomeDataDto.required,
-      number: postSomeDataDto.number,
+      name: postTeamDto.name,
     })
   }
 }
 
 @Controller({
-  path: '/sample2',
+  path: '/team',
 })
-export class Sample2Controller {
-  // memo: @ApiResponseを定義しておかないとSwaggerに出力されない
+export class TeamController {
   @Get()
   @ApiResponse({ status: 200, type: Object })
-  async getSomeData(): Promise<Object> {
-    return { sample: ["hogehoge"] }
+  async getTeam(): Promise<Object> {
+    return { team: ["1"] }
   }
 
 }

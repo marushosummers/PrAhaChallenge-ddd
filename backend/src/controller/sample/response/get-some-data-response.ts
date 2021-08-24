@@ -1,39 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { SomeDataDTO } from 'src/app/sample/query-service-interface/some-data-qs'
+import { TeamDTO } from 'src/app/sample/query-service-interface/some-data-qs'
 
-export class GetSomeDataResponse {
-  @ApiProperty({ type: () => [SomeData] })
-  someData: SomeData[]
+export class GetTeamResponse {
+  @ApiProperty({ type: () => [Team] })
+  someData: Team[]
 
-  public constructor(params: { someDatas: SomeDataDTO[] }) {
+  public constructor(params: { someDatas: TeamDTO[] }) {
     const { someDatas } = params
-    this.someData = someDatas.map(({ id, required, number }) => {
-      return new SomeData({
+    this.someData = someDatas.map(({ id, name}) => {
+      return new Team({
         id,
-        required,
-        number,
+        name
       })
     })
   }
 }
 
-class SomeData {
+class Team {
   @ApiProperty()
-  id: string
+  id: number
 
   @ApiProperty()
-  required: boolean
-
-  @ApiProperty()
-  number: number
+  name: string
 
   public constructor(params: {
-    id: string
-    required: boolean
-    number: number
+    id: number
+    name: string
   }) {
     this.id = params.id
-    this.required = params.required
-    this.number = params.number
+    this.name = params.name
   }
 }
