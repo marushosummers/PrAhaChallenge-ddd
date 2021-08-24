@@ -1,7 +1,7 @@
 import { Team } from 'src/domain/entities/Team'
 import { createRandomIdString } from 'src/util/random'
 import { prisma } from '@testUtil/prisma'
-import { TeamRepository } from '../../repository/sample/some-data-repository'
+import { TeamRepository } from '../repository/team-repository'
 
 describe('some-data-repository.integration.ts', () => {
   const teamRepo = new TeamRepository(prisma)

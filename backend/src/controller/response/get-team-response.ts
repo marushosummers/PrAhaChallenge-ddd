@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { TeamDTO } from 'src/app/sample/query-service-interface/team-qs'
+import { TeamDTO } from 'src/app/query-service-interface/team-qs'
 
 export class GetTeamResponse {
   @ApiProperty({ type: () => [Team] })
-  someData: Team[]
+  team: Team[]
 
-  public constructor(params: { someDatas: TeamDTO[] }) {
-    const { someDatas } = params
-    this.someData = someDatas.map(({ id, name}) => {
+  public constructor(params: { teams: TeamDTO[] }) {
+    const { teams } = params
+    this.team = teams.map(({ id, name}) => {
       return new Team({
         id,
         name

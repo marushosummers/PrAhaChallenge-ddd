@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { ITeamRepository } from 'src/app/sample/repository-interface/team-repository'
+import { ITeamRepository } from 'src/app/repository-interface/team-repository'
 import { Team } from 'src/domain/entities/Team'
 
 export class TeamRepository implements ITeamRepository {

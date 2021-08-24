@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { TeamRepository } from 'src/infra/db/repository/sample/some-data-repository'
+import { TeamRepository } from 'src/infra/db/repository/team-repository'
 import { PostTeamUseCase } from '../post-team-usecase'
 import { mocked } from 'ts-jest/utils'
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'

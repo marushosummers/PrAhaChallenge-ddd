@@ -1,6 +1,6 @@
 import { Team } from 'src/domain/entities/Team'
 import { createRandomIdString } from 'src/util/random'
-import { ITeamRepository } from './repository-interface/some-data-repository'
+import { ITeamRepository } from './repository-interface/team-repository'
 
 export class PostTeamUseCase {
   private readonly teamRepo: ITeamRepository

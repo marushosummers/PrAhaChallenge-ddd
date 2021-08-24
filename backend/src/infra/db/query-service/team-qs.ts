@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import {
   TeamDTO,
   ITeamQS,
-} from 'src/app/sample/query-service-interface/team-qs'
+} from 'src/app/query-service-interface/team-qs'
 
 export class TeamQS implements ITeamQS {
   private prismaClient: PrismaClient

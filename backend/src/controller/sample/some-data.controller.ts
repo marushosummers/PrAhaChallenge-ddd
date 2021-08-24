@@ -3,7 +3,7 @@ import { ApiResponse } from '@nestjs/swagger'
 import { GetTeamResponse } from './response/get-some-data-response'
 import { PostTeamRequest } from './request/post-some-data-request'
 import { GetTeamUseCase } from '../../app/sample/get-some-data-usecase'
-import { PostTeamUseCase } from '../../app/sample/post-some-data-usecase'
+import { PostTeamUseCase } from '../../app/sample/post-team-usecase'
 import { TeamRepository } from 'src/infra/db/repository/sample/some-data-repository'
 import { PrismaClient } from '@prisma/client'
 import { TeamQS } from 'src/infra/db/query-service/sample/some-data-qs'
@@ -35,16 +35,4 @@ export class SampleController {
       name: postTeamDto.name,
     })
   }
-}
-
-@Controller({
-  path: '/team',
-})
-export class TeamController {
-  @Get()
-  @ApiResponse({ status: 200, type: Object })
-  async getTeam(): Promise<Object> {
-    return { team: ["1"] }
-  }
-
 }
