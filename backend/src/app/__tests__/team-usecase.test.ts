@@ -5,7 +5,7 @@ import { mocked } from 'ts-jest/utils'
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'
 
 jest.mock('@prisma/client')
-jest.mock('src/infra/db/repository/sample/some-data-repository')
+jest.mock('src/infra/db/repository/team-repository')
 
 describe('do', () => {
   let mockTeamRepo: MockedObjectDeep<TeamRepository>
@@ -21,7 +21,7 @@ describe('do', () => {
       }),
     ).resolves.toBe(undefined)
   })
-  it('[異常系]: someDataRepo.saveで例外が発生した場合、例外が発生する', () => {
+  it('[異常系]: saveで例外が発生した場合、例外が発生する', () => {
     const ERROR_MESSAGE = 'error!'
     mockTeamRepo.save.mockRejectedValueOnce(ERROR_MESSAGE)
     const usecase = new PostTeamUseCase(mockTeamRepo)
