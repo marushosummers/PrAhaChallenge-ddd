@@ -11,7 +11,11 @@ export class TeamQS implements ITeamQS {
   }
 
   public async getAll(): Promise<TeamDTO[]> {
-    const allTeams = await this.prismaClient.team.findMany()
+    const allTeams = await this.prismaClient.team.findMany({
+      include: {
+        pairs: true
+      }
+    })
     return allTeams.map(
       (TeamDM) =>
         new TeamDTO({
