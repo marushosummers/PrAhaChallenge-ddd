@@ -7,7 +7,7 @@ export class PostTeamUseCase {
   public constructor(teamRepo: ITeamRepository) {
     this.teamRepo = teamRepo
   }
-  public async do(params: { name: string }) {
+  public async do(params: { name: number }) {
     const { name } = params
 
     const teamEntity = new Team({

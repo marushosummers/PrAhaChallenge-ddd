@@ -4,12 +4,12 @@ import { prisma } from '@testUtil/prisma'
 
 export const seedTeam = async (params: {
   id?: string
-  name?: string
+  name?: number
 }) => {
   const { id, name } = params
   const teamEntity = new Team({
     id: id ?? faker.datatype.uuid(),
-    name: name ?? "hoge",
+    name: name ?? 101,
   })
   await prisma.team.create({
     data: {

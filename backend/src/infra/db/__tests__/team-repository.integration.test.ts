@@ -18,7 +18,7 @@ describe('some-data-repository.integration.ts', () => {
     it('[正常系]teamを保存できる', async () => {
       const teamExpected = {
         id: createRandomIdString(),
-        name: 'test'
+        name: 101
       }
       await teamRepo.save(new Team(teamExpected))
 

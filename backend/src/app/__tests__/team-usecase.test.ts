@@ -17,7 +17,7 @@ describe('do', () => {
     const usecase = new PostTeamUseCase(mockTeamRepo)
     return expect(
       usecase.do({
-        name: "hoge"
+        name: 1
       }),
     ).resolves.toBe(undefined)
   })
@@ -27,7 +27,7 @@ describe('do', () => {
     const usecase = new PostTeamUseCase(mockTeamRepo)
     return expect(
       usecase.do({
-        name: "hoge"
+        name: 1
       }),
     ).rejects.toEqual(ERROR_MESSAGE)
   })

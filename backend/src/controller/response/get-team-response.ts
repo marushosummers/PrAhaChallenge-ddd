@@ -7,10 +7,11 @@ export class GetTeamResponse {
 
   public constructor(params: { teams: TeamDTO[] }) {
     const { teams } = params
-    this.team = teams.map(({ id, name}) => {
+    this.team = teams.map(({ id, name }) => {
+      const _name: string = String(name)
       return new Team({
-        id,
-        name
+        id: id,
+        name: _name
       })
     })
   }

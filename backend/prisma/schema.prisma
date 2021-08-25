@@ -10,7 +10,7 @@ generator client {
 
 model Team {
   id        String    @id
-  name      String
+  name      Int
   pairs     Pair[]
 }
 

@@ -1,8 +1,8 @@
 export class Team {
   private id: string
-  private name: string
+  private name: number
 
-  public constructor(props: { id: string, name: string }) {
+  public constructor(props: { id: string, name: number }) {
     const { id, name } = props
     this.id = id
     this.name = name

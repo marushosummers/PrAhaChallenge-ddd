@@ -15,7 +15,7 @@ describe('prism全般に関するテスト', () => {
       await prisma.team.create({
         data: {
           id: '1',
-          name: 'test',
+          name: 101,
         },
       })
       const allteam = await prisma.team.findMany()
@@ -28,13 +28,13 @@ describe('prism全般に関するテスト', () => {
         const task1 = prisma.team.create({
           data: {
           id: '1',
-          name: 'test',
+          name: 101,
           },
         })
         const task2 = prisma.team.create({
           data: {
           id: '2',
-          name: 'test',
+          name: 101,
           },
         })
         await prisma.$transaction([task1, task2])
