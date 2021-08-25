@@ -1,8 +1,8 @@
 export class Task {
-  private id: number
+  private id: string
   private content: string
 
-  public constructor(props: { id: number; content: string }) {
+  public constructor(props: { id: string, content: string }) {
     const { id, content } = props
     this.id = id
     this.content = content

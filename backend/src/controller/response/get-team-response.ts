@@ -18,13 +18,13 @@ export class GetTeamResponse {
 
 class Team {
   @ApiProperty()
-  id: number
+  id: string
 
   @ApiProperty()
   name: string
 
   public constructor(params: {
-    id: number
+    id: string
     name: string
   }) {
     this.id = params.id

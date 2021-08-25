@@ -1,11 +1,11 @@
 export class Member {
-  private id: number
+  private id: string
   private name: string
   private email: string
   private pair: string
   private activityStatus: ActivityStatus // TODO: ActivityStatusはenumとして定義した。DBでの定義は削除する。
 
-  public constructor(props: { id: number, name: string, email: string, pair: string, activityStatus: ActivityStatus }) {
+  public constructor(props: { id: string, name: string, email: string, pair: string, activityStatus: ActivityStatus }) {
     const { id, name, email, pair, activityStatus } = props
     this.id = id
     this.name = name

@@ -11,7 +11,7 @@ export class PostTeamUseCase {
     const { name } = params
 
     const teamEntity = new Team({
-      id: 1,
+      id: createRandomIdString(),
       name
     })
     await this.teamRepo.save(teamEntity)

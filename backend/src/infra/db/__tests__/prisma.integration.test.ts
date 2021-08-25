@@ -14,7 +14,7 @@ describe('prism全般に関するテスト', () => {
     it('DBに追加できる', async () => {
       await prisma.team.create({
         data: {
-          id: 1,
+          id: '1',
           name: 'test',
         },
       })
@@ -27,13 +27,13 @@ describe('prism全般に関するテスト', () => {
       try {
         const task1 = prisma.team.create({
           data: {
-          id: 1,
+          id: '1',
           name: 'test',
           },
         })
         const task2 = prisma.team.create({
           data: {
-          id: 1,
+          id: '2',
           name: 'test',
           },
         })
