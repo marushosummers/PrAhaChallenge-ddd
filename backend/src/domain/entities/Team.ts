@@ -1,3 +1,4 @@
+import {Pair } from './Pair'
 export class Team {
   private id: string
   private name: number
@@ -10,22 +11,13 @@ export class Team {
     this.pairs = pairs
   }
 
+  // TODO: チーム名・ペアの制約を入れる
+
   public getAllProperties() {
     return {
       id: this.id,
       name: this.name,
       pair: this.pairs
     }
-  }
-}
-
-class Pair {
-  private id: string
-  private name: string
-
-  public constructor(props: { id: string, name: string }) {
-    const { id, name } = props
-    this.id = id
-    this.name = name
   }
 }
