@@ -7,10 +7,9 @@ export class GetPairResponse {
   public constructor(params: { pairs: PairDTO[] }) {
     const { pairs } = params
     this.pairs = pairs.map(({ id, name, members }) => {
-      const _name: string = String(name)
       return new Pair({
         id: id,
-        name: _name,
+        name: name,
         members: members,
       })
     })

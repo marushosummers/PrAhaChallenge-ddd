@@ -12,7 +12,7 @@ export class Pair {
     this.members = members
   }
 
-  // TODO: チーム名・ペアの制約を入れる
+  // TODO: ペア名・メンバー数の制約を入れる
 
   public getAllProperties() {
     return {
