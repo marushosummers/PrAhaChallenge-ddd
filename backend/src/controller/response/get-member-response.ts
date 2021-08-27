@@ -6,13 +6,14 @@ export class GetMemberResponse {
 
   public constructor(params: { members: MemberDTO[] }) {
     const { members } = params
-    this.members = members.map(({ id, name, email, activityStatus, pairId }) => {
+    this.members = members.map(({ id, name, email, activityStatus, pair, tasks }) => {
       return new Member({
         id: id,
         name: name,
         email: email,
         activityStatus: activityStatus,
-        pairId: pairId,
+        pair: pair,
+        tasks: tasks
       })
     })
   }
@@ -32,19 +33,24 @@ class Member {
   activityStatus: string
 
   @ApiProperty()
-  pairId: string
+  pair: any
+
+  @ApiProperty()
+  tasks: any
 
   public constructor(params: {
     id: string
     name: string
     email: string
     activityStatus: string
-    pairId: string
+    pair: any
+    tasks: any
   }) {
     this.id = params.id
     this.name = params.name
     this.email = params.email
     this.activityStatus = params.activityStatus
-    this.pairId = params.pairId
+    this.pair = params.pair
+    this.tasks = params.tasks
   }
 }

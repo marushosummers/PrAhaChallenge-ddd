@@ -44,5 +44,5 @@ model MemberTask {
   memberId    String
   task      Task   @relation(fields: [taskId], references: [id])
   taskId    String
-  progressStatusId String @default("InReview")
+  progressStatus String @default("InReview")
 }
