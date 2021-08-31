@@ -40,4 +40,68 @@ export class SearchProgressQS implements ISearchProgressQS {
         }),
     )
   }
+
+  public async get10records(taskids: string[], progress: string, cursor?: string): Promise<SearchProgressDTO[]> {
+    const skipCount: number = 10;
+    let result: any[];
+    if (typeof cursor === 'string') {
+      result = await this.prismaClient.memberTask.findMany({
+        take: skipCount,
+        skip: 1, // Skip the cursor
+        cursor: {
+          id: cursor,
+        },
+        include: {
+          task: true,
+          member: true
+        },
+        where: {
+          AND: {
+            taskId: {
+              in: taskids,
+            },
+            progressStatus: {
+              equals: progress,
+            },
+          },
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      })
+    } else {
+      result = await this.prismaClient.memberTask.findMany({
+        take: skipCount,
+        include: {
+          task: true,
+          member: true
+        },
+        where: {
+          AND: {
+            taskId: {
+              in: taskids,
+            },
+            progressStatus: {
+              equals: progress,
+            },
+          },
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      })
+    }
+    console.log(result)
+    return result.map(
+      (SearchProgressDM) =>
+        new SearchProgressDTO({
+          id: SearchProgressDM.id,
+          taskId: SearchProgressDM.task.id,
+          taskContent: SearchProgressDM.task.content,
+          status: SearchProgressDM.progressStatus,
+          memberId: SearchProgressDM.member.id,
+          memberName: SearchProgressDM.member.name
+        }),
+    )
+  }
 }

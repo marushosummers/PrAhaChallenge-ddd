@@ -17,4 +17,5 @@ export class SearchProgressDTO {
 }
 export interface ISearchProgressQS {
   getAll(taskId: string[], status: string): Promise<SearchProgressDTO[]>
+  get10records(taskId: string[], status: string, cursor?: string): Promise<SearchProgressDTO[]>
 }
