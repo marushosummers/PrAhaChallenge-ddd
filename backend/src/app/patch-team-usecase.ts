@@ -1,19 +1,20 @@
 import { Team } from 'src/domain/entities/Team'
-import { createRandomIdString } from 'src/util/random'
 import { ITeamRepository } from './repository-interface/team-repository'
 
-export class PostTeamUseCase {
+export class PatchTeamUseCase {
   private readonly teamRepo: ITeamRepository
   public constructor(teamRepo: ITeamRepository) {
     this.teamRepo = teamRepo
   }
-  public async do(params: { name: number }) {
-    const { name } = params
+  public async do(params: { id: string, name: number }) {
+    const { id, name } = params
 
     const teamEntity = new Team({
-      id: createRandomIdString(),
+      id,
       name
     })
-    await this.teamRepo.save(teamEntity)
+    const result = await this.teamRepo.update(teamEntity)
+    return result
   }
 }
+

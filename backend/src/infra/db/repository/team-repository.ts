@@ -8,17 +8,20 @@ export class TeamRepository implements ITeamRepository {
     this.prismaClient = prismaClient
   }
 
-  public async save(TeamEntity: Team): Promise<Team> {
+  public async update(TeamEntity: Team): Promise<Team> {
     const { id, name } = TeamEntity.getAllProperties()
 
-    const savedTeamDatamodel = await this.prismaClient.team.create({
+    const updateTeam = await this.prismaClient.team.update({
+      where: {
+        id: id,
+      },
       data: {
-        id,
-        name,
+        name: name,
       },
     })
     const savedTeamEntity = new Team({
-      ...savedTeamDatamodel,
+      id: updateTeam.id,
+      name: updateTeam.name
     })
     return savedTeamEntity
   }
