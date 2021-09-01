@@ -9,7 +9,7 @@ export const seedTeam = async (params: {
   const { id, name } = params
   const teamEntity = new Team({
     id: id ?? faker.datatype.uuid(),
-    name: name ?? 101,
+    name: name ?? 100,
   })
   await prisma.team.create({
     data: {
