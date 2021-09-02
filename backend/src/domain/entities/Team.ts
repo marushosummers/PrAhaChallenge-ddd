@@ -1,4 +1,4 @@
-import {Pair } from './Pair'
+import { Pair } from './Pair'
 export class Team {
   private id: string
   private name: number
@@ -6,6 +6,8 @@ export class Team {
 
   public constructor(props: { id: string, name: number, pairs?: Pair[] }) {
     const { id, name, pairs } = props
+    this.validateName(name)
+
     this.id = id
     this.name = name
     this.pairs = pairs
@@ -20,4 +22,10 @@ export class Team {
       pair: this.pairs
     }
   }
+
+  private validateName(name: number): void {
+    if (!(Number.isInteger(name) && 0 <= name && name <= 999)) {
+      throw new Error("Team name should be an integer of 3 characters or less.");
+    }
+  };
 }
