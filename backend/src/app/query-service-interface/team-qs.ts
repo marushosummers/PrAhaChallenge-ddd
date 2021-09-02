@@ -11,4 +11,6 @@ export class TeamDTO {
 }
 export interface ITeamQS {
   getAll(): Promise<TeamDTO[]>
+  getById(id: string): Promise<TeamDTO[]>
+  getByName(name: number): Promise<TeamDTO[]>
 }

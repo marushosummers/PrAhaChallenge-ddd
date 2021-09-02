@@ -10,13 +10,13 @@ generator client {
 
 model Team {
   id        String    @id
-  name      Int
+  name      Int  @unique
   pairs     Pair[]
 }
 
 model Pair {
   id        String    @id
-  name      String
+  name      String  @unique
   team      Team   @relation(fields: [teamId], references: [id])
   teamId    String
   members   Member[]

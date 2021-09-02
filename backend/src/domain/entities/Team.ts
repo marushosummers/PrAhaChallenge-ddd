@@ -23,6 +23,14 @@ export class Team {
     }
   }
 
+  public getId() {
+    return this.id
+  }
+
+  public getName() {
+    return this.name
+  }
+
   private validateName(name: number): void {
     if (!(Number.isInteger(name) && 0 <= name && name <= 999)) {
       throw new Error("Team name should be an integer of 3 characters or less.");

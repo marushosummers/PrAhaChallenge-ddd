@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Get, Patch } from '@nestjs/common'
+import { Body, Controller, Param, Get, Patch, HttpException, HttpStatus} from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetTeamResponse } from './response/get-team-response'
 import { GetTeamUseCase } from '../app/get-team-usecase'
@@ -25,19 +25,41 @@ export class TeamController {
 
   @Patch('/:id')
   @ApiResponse({ status: 200, type: Team })
-  @ApiResponse({ status: 500, description: "Internal Error"})
+  @ApiResponse({ status: 500 })
   async updateTeam(
     @Param('id') id: string,
     @Body() patchTeamDTO: PatchTeamRequest,
   ): Promise<Team> {
     const prisma = new PrismaClient()
     const repo = new TeamRepository(prisma)
-    const usecase = new PatchTeamUseCase(repo)
-    const result = await usecase.do({
-      id: id,
-      name: patchTeamDTO.name,
-    })
-    return result
+    const qs = new TeamQS(prisma)
+    const usecase = new PatchTeamUseCase(repo, qs)
+
+    try {
+      const result = await usecase.do({
+        id: id,
+        name: patchTeamDTO.name,
+      })
+      return result
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: e.message,
+          },
+          500,
+        );
+      } else {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: "Internal server error",
+          },
+          500,
+        );
+      }
+    }
   }
 }
 
