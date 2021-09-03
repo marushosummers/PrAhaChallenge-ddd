@@ -13,8 +13,6 @@ export class Team {
     this.pairs = pairs
   }
 
-  // TODO: チーム名・ペアの制約を入れる
-
   public getAllProperties() {
     return {
       id: this.id,
