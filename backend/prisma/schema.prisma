@@ -9,37 +9,37 @@ generator client {
 }
 
 model Team {
-  id        String    @id
-  name      Int  @unique
+  id        String    @id @default(uuid())
+  name      Int @unique
   pairs     Pair[]
 }
 
 model Pair {
-  id        String    @id
-  name      String  @unique
+  id        String    @id @default(uuid())
+  name      String
   team      Team   @relation(fields: [teamId], references: [id])
   teamId    String
   members   Member[]
 }
 
 model Member {
-  id        String    @id
+  id        String    @id @default(uuid())
   name      String
-  email     String
-  pair      Pair   @relation(fields: [pairId], references: [id])
-  pairId    String
+  email     String @unique
+  pair      Pair?   @relation(fields: [pairId], references: [id])
+  pairId    String?
   activityStatus      String @default("ONGOING")
   memberTasks MemberTask[]
 }
 
 model Task {
-  id        String    @id
+  id        String    @id @default(uuid())
   content      String
   memberTasks MemberTask[]
 }
 
 model MemberTask {
-  id        String    @id
+  id        String    @id @default(uuid())
   member      Member   @relation(fields: [memberId], references: [id])
   memberId    String
   task      Task   @relation(fields: [taskId], references: [id])
