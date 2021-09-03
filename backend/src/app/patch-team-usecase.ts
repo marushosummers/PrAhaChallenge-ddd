@@ -20,7 +20,7 @@ export class PatchTeamUseCase {
     })
     const teamService = new TeamService(this.teamQS)
     if (await teamService.isSameNameExist(name)) {
-      throw new Error
+      throw new Error("There is data with the same name.")
     }
     const result = await this.teamRepo.update(teamEntity)
     return result

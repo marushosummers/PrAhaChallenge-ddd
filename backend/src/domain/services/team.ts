@@ -11,15 +11,13 @@ export class TeamService {
 
   public isExist = async (id: string): Promise<boolean> => {
     const result = await this.teamQs.getById(id);
-    console.log(result)
 
-    return result.length === 1;
+    return Boolean(result);
   };
 
   public isSameNameExist = async (name: number): Promise<boolean> => {
     const result = await this.teamQs.getByName(name);
-    console.log(result)
 
-    return result.length === 1;
+    return Boolean(result);
   };
 }

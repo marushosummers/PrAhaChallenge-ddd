@@ -27,7 +27,7 @@ export class SearchProgressQS implements ISearchProgressQS {
         },
       },
     })
-    console.log(allSearchProgresss)
+
     return allSearchProgresss.map(
       (SearchProgressDM) =>
         new SearchProgressDTO({
@@ -91,7 +91,7 @@ export class SearchProgressQS implements ISearchProgressQS {
         },
       })
     }
-    console.log(result)
+
     return result.map(
       (SearchProgressDM) =>
         new SearchProgressDTO({
