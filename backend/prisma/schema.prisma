@@ -28,7 +28,7 @@ model Member {
   email     String @unique
   pair      Pair?   @relation(fields: [pairId], references: [id])
   pairId    String?
-  activityStatus      String @default("ONGOING")
+  activityStatus ActivityStatus @default(ONGOING)
   memberTasks MemberTask[]
 }
 
@@ -45,4 +45,10 @@ model MemberTask {
   task      Task   @relation(fields: [taskId], references: [id])
   taskId    String
   progressStatus String @default("InReview")
+}
+
+enum ActivityStatus {
+  ONGOING
+  RECESS
+  LEFT
 }

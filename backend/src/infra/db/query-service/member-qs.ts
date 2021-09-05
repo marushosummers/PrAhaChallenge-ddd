@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import e from 'express'
 import {
   MemberDTO,
   IMemberQS,
