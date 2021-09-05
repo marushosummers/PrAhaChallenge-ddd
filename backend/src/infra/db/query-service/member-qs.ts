@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import e from 'express'
 import {
   MemberDTO,
   IMemberQS,
@@ -11,7 +12,7 @@ export class MemberQS implements IMemberQS {
   }
 
   public async getAll(): Promise<MemberDTO[]> {
-    const allTeams = await this.prismaClient.member.findMany({
+    const allMembers = await this.prismaClient.member.findMany({
       include: {
         pair: true,
         memberTasks:　{
@@ -19,7 +20,7 @@ export class MemberQS implements IMemberQS {
         },
       }
     })
-    return allTeams.map(
+    return allMembers.map(
       (MemberDM) =>
         new MemberDTO({
           id: MemberDM.id,
@@ -36,5 +37,34 @@ export class MemberQS implements IMemberQS {
             }})
         }),
     )
+  }
+
+  public async getByEmail(email: string): Promise<MemberDTO | null> {
+    const member = await this.prismaClient.member.findUnique({
+      where: {
+        email: email
+      },
+      include: {
+        pair: true,
+        memberTasks:　{
+          include: { task: true },
+        },
+      }
+    })
+    return member ?
+        new MemberDTO({
+          id: member.id,
+          name: member.name,
+          email: member.email,
+          activityStatus: member.activityStatus,
+          pair: member.pair,
+          tasks: member?.memberTasks.map((task) => {
+            return {
+              id: task.id,
+              taskId: task.taskId,
+              content: task.task.content,
+              progressStatus: task.progressStatus
+            }})
+        }) : null
   }
 }
