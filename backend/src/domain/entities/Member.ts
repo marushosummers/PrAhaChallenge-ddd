@@ -2,18 +2,19 @@ export class Member {
   private id: string
   private name: string
   private email: string
-  private pair: string
+  private pair: string | null
   private activityStatus: ActivityStatus
 
-  public constructor(props: { id: string, name: string, email: string, pair: string}) {
-    const { id, name, email, pair } = props
+  public constructor(props: { id: string, name: string, email: string, pair: string, activityStatus: ActivityStatus}) {
+    const { id, name, email, pair, activityStatus } = props
     this.validateEmail(email)
+    this.validateActivityStatus(activityStatus, pair)
 
     this.id = id
     this.name = name
     this.email = email
     this.pair = pair
-    this.activityStatus = "ONGOING"
+    this.activityStatus = activityStatus
   }
 
   public getAllProperties() {
@@ -31,8 +32,16 @@ export class Member {
       throw new Error("Invalid Email Format");
     }
   }
+
+  private validateActivityStatus(activityStatus: ActivityStatus, pair: string | null): void {
+    if (activityStatus !== 'ONGOING') {
+      if (pair !== null) {
+        throw new Error("Must not belong to any team or pair unless the status is ONGOING");
+      }
+    }
+  }
 }
 
-export type ActivityStatus = 'ONGOING' | 'RECESS' | 'LEFT';
+export type ActivityStatus = 'ONGOING' | 'RECESS' | 'LEFT'; // 在籍中 | 休会中 | 退会済
 type TaskProgressStatus = 'ONGOING' | 'RECESS' | 'LEFT';
 
