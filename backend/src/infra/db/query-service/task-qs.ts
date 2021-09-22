@@ -19,4 +19,16 @@ export class TaskQS implements ITaskQS {
         }),
     )
   }
+
+  public async getById(id: string): Promise<TaskDTO | null> {
+    const task = await this.prismaClient.task.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        memberTasks: true
+      }
+    })
+    return task ? new TaskDTO({ ...task }) : null
+  }
 }

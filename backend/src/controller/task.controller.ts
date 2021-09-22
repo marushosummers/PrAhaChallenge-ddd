@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Param, Controller, Get, Post, Delete } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetTaskResponse } from './response/get-task-response'
 import { GetTaskUseCase } from '../app/get-task-usecase'
@@ -8,6 +8,7 @@ import { PostTaskUseCase } from 'src/app/post-task-usecase'
 import { PostTaskRequest } from './request/post-task-request'
 import { TaskRepository } from 'src/infra/db/repository/task-repository'
 import { Task } from 'src/domain/entities/Task'
+import { DeleteTaskUseCase } from 'src/app/delete-task-usecase'
 
 @Controller({
   path: '/task',
@@ -34,6 +35,16 @@ export class TaskController {
     const usecase = new PostTaskUseCase(repo, qs)
     const task = await usecase.do({ content: postTaskDTO.content })
     return task
+  }
+
+  @Delete("/:id")
+  @ApiResponse({ status: 200 })
+  async deleteTask(@Param("id") id: string): Promise<void> {
+    const prisma = new PrismaClient()
+    const qs = new TaskQS(prisma)
+    const repo = new TaskRepository(prisma)
+    const usecase = new DeleteTaskUseCase(repo, qs)
+    await usecase.do({ id: id })
   }
 }
 

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import e from 'express'
 import { ITaskRepository } from 'src/app/repository-interface/task-repository'
 import { Task } from 'src/domain/entities/Task'
 
@@ -22,5 +23,11 @@ export class TaskRepository implements ITaskRepository {
       content: createTask.content
     })
     return savedTaskEntity
+  }
+
+  public async deleteById(id: string): Promise<void> {
+    const deleteMemberTasks = this.prismaClient.memberTask.deleteMany({ where: { taskId: id } })
+    const deleteTask = this.prismaClient.task.delete({ where: { id: id } })
+    await this.prismaClient.$transaction([deleteMemberTasks, deleteTask])
   }
 }
