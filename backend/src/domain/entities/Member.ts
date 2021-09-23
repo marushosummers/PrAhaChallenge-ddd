@@ -42,6 +42,25 @@ export class Member {
   }
 }
 
+class MemberTask {
+  private id: string;
+  private progressStatus: TaskProgressStatus;
+
+  public constructor(props: { id: string, progressStatus: TaskProgressStatus }) {
+    const { id, progressStatus } = props;
+
+    this.id = id;
+    this.progressStatus = progressStatus;
+  }
+
+  public getAllProperties() {
+    return {
+      id: this.id,
+      progressStatus: this.progressStatus,
+    }
+  }
+}
+
 export type ActivityStatus = 'ONGOING' | 'RECESS' | 'LEFT'; // 在籍中 | 休会中 | 退会済
-type TaskProgressStatus = 'ONGOING' | 'RECESS' | 'LEFT';
+export type TaskProgressStatus = 'NOTYET' | 'RERUESTREVIEW' | 'DONE'; // 未着手 | レビュー待ち | 完了
 
