@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import {
   MemberDTO,
   IMemberQS,
+  MemberDetailDTO,
 } from 'src/app/query-service-interface/member-qs'
 
 export class MemberQS implements IMemberQS {
@@ -65,5 +66,51 @@ export class MemberQS implements IMemberQS {
               progressStatus: task.progressStatus
             }})
         }) : null
+  }
+
+
+  public async getById(id: string): Promise<MemberDetailDTO | null> {
+    const member = await this.prismaClient.member.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        pair: true,
+      }
+    })
+
+    const memberTasks = await this.prismaClient.task.findMany({
+      select: {
+        id: true,
+        memberTasks: {
+          select: {
+            id: true,
+            memberId: true,
+            progressStatus: true,
+          },
+          where: {
+            memberId: id
+          }
+        },
+      }
+    })
+
+    console.log(memberTasks)
+
+    return member ?
+      new MemberDetailDTO({
+        id: member.id,
+        name: member.name,
+        email: member.email,
+        activityStatus: member.activityStatus,
+        pair: member.pair,
+        tasks: memberTasks.map((task) => {
+          return {
+            id: task.id,
+            memberTaskId: task.memberTasks[0] ? task.memberTasks[0].id : undefined,
+            progressStatus: task.memberTasks[0] ? task.memberTasks[0].progressStatus : "NOTYET",
+          }
+        })
+      }) : null
   }
 }

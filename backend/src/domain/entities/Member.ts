@@ -4,9 +4,10 @@ export class Member {
   private email: string
   private pair: string | null
   private activityStatus: ActivityStatus
+  private memberTasks: MemberTask[]
 
-  public constructor(props: { id: string, name: string, email: string, pair: string, activityStatus: ActivityStatus}) {
-    const { id, name, email, pair, activityStatus } = props
+  public constructor(props: { id: string, name: string, email: string, pair: string, activityStatus: ActivityStatus, memberTasks: MemberTask[] }) {
+    const { id, name, email, pair, activityStatus, memberTasks } = props
     this.validateEmail(email)
     this.validateActivityStatus(activityStatus, pair)
 
@@ -15,6 +16,7 @@ export class Member {
     this.email = email
     this.pair = pair
     this.activityStatus = activityStatus
+    this.memberTasks = memberTasks
   }
 
   public getAllProperties() {
@@ -23,7 +25,8 @@ export class Member {
       name: this.name,
       email: this.email,
       pair: this.pair,
-      activityStatus: this.activityStatus
+      activityStatus: this.activityStatus,
+      memberTasks: this.memberTasks,
     }
   }
 
@@ -44,12 +47,14 @@ export class Member {
 
 class MemberTask {
   private id: string;
+  private taskId: string;
   private progressStatus: TaskProgressStatus;
 
-  public constructor(props: { id: string, progressStatus: TaskProgressStatus }) {
-    const { id, progressStatus } = props;
+  public constructor(props: { id: string, taskId: string, progressStatus: TaskProgressStatus }) {
+    const { id, taskId, progressStatus } = props;
 
     this.id = id;
+    this.taskId = taskId;
     this.progressStatus = progressStatus;
   }
 
