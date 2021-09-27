@@ -1,5 +1,3 @@
-import { Task } from 'src/domain/entities/Task'
-import { TaskService } from 'src/domain/services/task'
 import { ITaskRepository } from './repository-interface/task-repository'
 import { ITaskQS } from './query-service-interface/task-qs'
 
@@ -16,9 +14,13 @@ export class DeleteTaskUseCase {
   public async do(params: { id: string }): Promise<void> {
     const { id } = params
 
-    const taskService = new TaskService(this.taskRepo, this.taskQS)
+    const task = await this.taskQS.getById(id)
 
-    await taskService.delete(id)
+    if (!task) {
+      throw new Error();
+    } else {
+      await this.taskRepo.deleteById(task.id);
+    }
   }
 }
 

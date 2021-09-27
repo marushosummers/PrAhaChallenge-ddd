@@ -17,11 +17,4 @@ export class TaskService {
 
     return Boolean(result);
   };
-
-  public delete = async (id: string): Promise<void> => {
-    if (!await this.isExist(id)) {
-      throw new Error();
-    }
-    await this.taskRepository.deleteById(id);
-  };
 }

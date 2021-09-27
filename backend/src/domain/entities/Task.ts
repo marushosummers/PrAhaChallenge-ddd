@@ -14,4 +14,5 @@ export class Task {
       content: this.content
     }
   }
+
 }
