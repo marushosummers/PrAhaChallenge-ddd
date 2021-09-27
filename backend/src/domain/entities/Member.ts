@@ -61,6 +61,7 @@ class MemberTask {
   public getAllProperties() {
     return {
       id: this.id,
+      taskId: this.taskId,
       progressStatus: this.progressStatus,
     }
   }
