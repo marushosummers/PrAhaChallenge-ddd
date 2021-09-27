@@ -1,4 +1,3 @@
-import { Pair } from './Pair'
 export class Team {
   private id: string
   private name: number
@@ -34,4 +33,33 @@ export class Team {
       throw new Error("Team name should be an integer of 3 characters or less.");
     }
   };
+}
+export class Pair {
+  private id: string
+  private name: string
+  private memberIds: string[]
+
+  public constructor(props: { id: string, name: string, memberIds: string[] }) {
+    const { id, name, memberIds } = props
+
+    this.validateName(name)
+
+    this.id = id
+    this.name = name
+    this.memberIds = memberIds
+  }
+
+  public getAllProperties() {
+    return {
+      id: this.id,
+      name: this.name,
+      members: this.memberIds
+    }
+  }
+
+  private validateName(name: string): void {
+    if (!new RegExp("^[a-z]$").test(name)) {
+      throw new Error("Team name should be a lowercase alphabet.");
+    }
+  }
 }
