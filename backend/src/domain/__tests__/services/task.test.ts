@@ -17,7 +17,7 @@ describe('isExist', () => {
 
   it('正常系', async () => {
     const id = "testId"
-    const taskService = new TaskService(mockITaskRepository, mockTaskQS)
+    const taskService = new TaskService(mockTaskQS)
 
     expect(taskService.isExist(id)).resolves.toBeInstanceOf(Boolean)
     expect(mockTaskQS.getById).toHaveBeenCalled()

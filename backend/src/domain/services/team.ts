@@ -1,6 +1,4 @@
 import { ITeamQS } from "src/app/query-service-interface/team-qs";
-import { Team } from "../entities/Team";
-
 
 export class TeamService {
   private readonly teamQs: ITeamQS;
