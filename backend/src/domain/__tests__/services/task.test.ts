@@ -1,8 +1,6 @@
 import { mocked } from 'ts-jest/utils'
-import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'
 import { TaskService } from 'src/domain/services/task';
 import { TaskQS } from 'src/infra/db/query-service/task-qs';
-import { ITaskRepository } from 'src/app/repository-interface/task-repository';
 import { PrismaClient } from '.prisma/client';
 
 jest.mock('@prisma/client')
@@ -11,7 +9,6 @@ jest.mock("src/app/repository-interface/task-repository")
 
 
 describe('isExist', () => {
-  let mockITaskRepository: MockedObjectDeep<ITaskRepository>
   const prisma = new PrismaClient()
   const mockTaskQS = mocked(new TaskQS(prisma), true)
 
