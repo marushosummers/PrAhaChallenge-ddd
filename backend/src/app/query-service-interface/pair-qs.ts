@@ -9,6 +9,7 @@ export class PairDTO {
     this.members = members
   }
 }
+// TODO: Team-qsに統合する
 export interface IPairQS {
   getAll(): Promise<PairDTO[]>
 }

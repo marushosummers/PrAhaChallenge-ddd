@@ -1,9 +1,11 @@
-export class Team {
-  private id: string
-  private name: number
-  private pairs?: Pair[]
+import { Member } from "./Member"
 
-  public constructor(props: { id: string, name: number, pairs?: Pair[] }) {
+export class Team {
+  public readonly id: string
+  public readonly name: number
+  public readonly pairs: Pair[]
+
+  public constructor(props: { id: string, name: number, pairs: Pair[] }) {
     const { id, name, pairs } = props
     this.validateName(name)
 
@@ -16,7 +18,7 @@ export class Team {
     return {
       id: this.id,
       name: this.name,
-      pair: this.pairs
+      pairs: this.pairs
     }
   }
 
@@ -33,11 +35,29 @@ export class Team {
       throw new Error("Team name should be an integer of 3 characters or less.");
     }
   };
+
+  public addMember(member: Member): void {
+    // TODO: 加入させるペアを調べる
+    // this.getJoinablePair()
+    // TODO: なければペアを再編成
+    // TODO: ペアに加入
+
+  }
+
+  public restructPair(): void {
+    // TODO: チームにあるペアが全てmax人だった場合、最少人数の新しいペアを1組作る
+  }
+
+  private getJoinablePair(): Pair | null　{
+    // TODO: 参加可能なペアを１組み返す
+    return Pair
+  }
 }
+
 export class Pair {
-  private id: string
-  private name: string
-  private memberIds: string[]
+  public readonly id: string
+  public readonly name: string
+  public readonly memberIds: string[]
 
   public constructor(props: { id: string, name: string, memberIds: string[] }) {
     const { id, name, memberIds } = props

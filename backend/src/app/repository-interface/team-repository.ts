@@ -1,5 +1,8 @@
 import { Team } from 'src/domain/entities/Team'
 
 export interface ITeamRepository {
-  update(team: Team): Promise<Team>
+  getAll(): Promise<Team[]>
+  getByPairId(pairId: string): Promise<Team | null>
+
+  save(team: Team): Promise<void>
 }

@@ -1,20 +1,20 @@
 export class Member {
-  private id: string
-  private name: string
-  private email: string
-  private pair: string | null
-  private activityStatus: ActivityStatus
-  private memberTasks: MemberTask[]
+  public readonly id: string
+  public readonly name: string
+  public readonly email: string
+  public readonly activityStatus: ActivityStatus
+  public readonly memberTasks: MemberTask[]
 
-  public constructor(props: { id: string, name: string, email: string, pair: string, activityStatus: ActivityStatus, memberTasks: MemberTask[] }) {
-    const { id, name, email, pair, activityStatus, memberTasks } = props
+  public constructor(props: { id: string, name: string, email: string, activityStatus: ActivityStatus, memberTasks: MemberTask[] }) {
+    const { id, name, email, activityStatus, memberTasks } = props
     this.validateEmail(email)
-    this.validateActivityStatus(activityStatus, pair)
+
+    // TODO: ValidationはPairドメインに移動
+    // this.validateActivityStatus(activityStatus, pair)
 
     this.id = id
     this.name = name
     this.email = email
-    this.pair = pair
     this.activityStatus = activityStatus
     this.memberTasks = memberTasks
   }
@@ -24,7 +24,6 @@ export class Member {
       id: this.id,
       name: this.name,
       email: this.email,
-      pair: this.pair,
       activityStatus: this.activityStatus,
       memberTasks: this.memberTasks,
     }
@@ -36,16 +35,16 @@ export class Member {
     }
   }
 
-  private validateActivityStatus(activityStatus: ActivityStatus, pair: string | null): void {
-    if (activityStatus !== 'ONGOING') {
-      if (pair !== null) {
-        throw new Error("Must not belong to any team or pair unless the status is ONGOING");
-      }
-    }
-  }
+  // private validateActivityStatus(activityStatus: ActivityStatus, pair: string | null): void {
+  //   if (activityStatus !== 'ONGOING') {
+  //     if (pair !== null) {
+  //       throw new Error("Must not belong to any team or pair unless the status is ONGOING");
+  //     }
+  //   }
+  // }
 }
 
-class MemberTask {
+export class MemberTask {
   private id: string;
   private taskId: string;
   private progressStatus: TaskProgressStatus;
