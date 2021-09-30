@@ -14,16 +14,23 @@ export class PatchTeamUseCase {
   public async do(params: { id: string, name: number }) {
     const { id, name } = params
 
-    const teamEntity = new Team({
-      id,
-      name
-    })
-    const teamService = new TeamService(this.teamQS)
+    const team = await this.teamRepo.getById(id)
+
+    if (!team) {
+      throw new Error("Not Found.")
+    }
+
+    const teamService = new TeamService(this.teamQS, this.teamRepo)
     if (await teamService.isSameNameExist(name)) {
       throw new Error("There is data with the same name.")
     }
-    const result = await this.teamRepo.update(teamEntity)
-    return result
+
+    team.setName(name)
+
+    await this.teamRepo.save(team)
+
+    const teamDTO = await this.teamQS.getById(id)
+    return teamDTO
   }
 }
 

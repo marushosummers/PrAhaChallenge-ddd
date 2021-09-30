@@ -2,8 +2,10 @@ import { Member } from "./Member"
 
 export class Team {
   public readonly id: string
-  public readonly name: number
-  public readonly pairs: Pair[]
+  private name: number
+  private pairs: Pair[]
+  private MIN_MEMBER = 2
+  private MAX_MEMBER = 3
 
   public constructor(props: { id: string, name: number, pairs: Pair[] }) {
     const { id, name, pairs } = props
@@ -30,6 +32,11 @@ export class Team {
     return this.name
   }
 
+  public setName(name: number) {
+    this.validateName(name)
+    this.name = name
+  }
+
   private validateName(name: number): void {
     if (!(Number.isInteger(name) && 0 <= name && name <= 999)) {
       throw new Error("Team name should be an integer of 3 characters or less.");
@@ -37,21 +44,31 @@ export class Team {
   };
 
   public addMember(member: Member): void {
-    // TODO: 加入させるペアを調べる
-    // this.getJoinablePair()
-    // TODO: なければペアを再編成
-    // TODO: ペアに加入
+    // NOTE: 加入させるペアを調べる
+    let pair = this.getJoinablePair()
 
+    // NOTE: なければペアを再編成
+    if (!pair) {
+      this.restructPair()
+      pair = this.getJoinablePair()
+
+      if (!pair) {
+        throw Error
+      }
+    }
+
+    // TODO: ペアに加入
+    pair.addMember(member)
+  }
+
+  public getJoinablePair(): Pair | undefined {
+    return this.pairs.find((pair) => pair.memberIds.length < this.MAX_MEMBER - 1)
   }
 
   public restructPair(): void {
     // TODO: チームにあるペアが全てmax人だった場合、最少人数の新しいペアを1組作る
   }
 
-  private getJoinablePair(): Pair | null　{
-    // TODO: 参加可能なペアを１組み返す
-    return Pair
-  }
 }
 
 export class Pair {
@@ -81,5 +98,9 @@ export class Pair {
     if (!new RegExp("^[a-z]$").test(name)) {
       throw new Error("Team name should be a lowercase alphabet.");
     }
+  }
+
+  public addMember(member: Member): void {
+    this.memberIds.push(member.id)
   }
 }

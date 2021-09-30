@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import e from 'express'
 import { ITaskRepository } from 'src/app/repository-interface/task-repository'
 import { Task } from 'src/domain/entities/Task'
 

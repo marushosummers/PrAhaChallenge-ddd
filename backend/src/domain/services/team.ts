@@ -29,7 +29,8 @@ export class TeamService {
   };
 
   public getTeamMemberCount = (team: Team): number => {
-    return team.pairs.reduce((prev, current) => prev + current.memberIds.length, 0);
+    const { pairs } = team.getAllProperties()
+    return pairs.reduce((prev, current) => prev + current.memberIds.length, 0);
   }
 
   public getPairMemberCount = (pair: Pair): number => {
