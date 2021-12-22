@@ -1,3 +1,5 @@
+import { MemberTaskFactory } from "../factory/member"
+
 export class Member {
   public readonly id: string
   public readonly name: string
@@ -27,6 +29,12 @@ export class Member {
       activityStatus: this.activityStatus,
       memberTasks: this.memberTasks,
     }
+  }
+
+  public assignNewTask(taskId: string): void{
+    const newMemberTask = MemberTaskFactory.create({taskId: taskId})
+    // TODO: 同じtaskIdがある場合のエラーハンドリング
+    this.memberTasks.push(newMemberTask);
   }
 
   private validateEmail(email: string): void {
