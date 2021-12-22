@@ -40,7 +40,7 @@ export class TeamController {
         id: id,
         name: patchTeamDTO.name,
       })
-      return result
+      return new Team({ id: "sample", name: 3, pairs: [] })
     } catch (e) {
       if (e instanceof Error) {
         throw new HttpException(
