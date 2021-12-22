@@ -1,5 +1,8 @@
 import { Member } from 'src/domain/entities/Member'
 
 export interface IMemberRepository {
-  create(member: Member): Promise<Member>
+  getAll(): Promise<Member[]>
+
+  save(member: Member): Promise<Member>
+  save(members: Member[]): Promise<Member[]>
 }
