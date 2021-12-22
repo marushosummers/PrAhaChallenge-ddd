@@ -22,7 +22,7 @@ export class CreateTaskUseCase {
 
     // TaskMemberの作成
     const allMembers = await this.memberRepo.getAll()
-    allMembers.forEach(member => member.assignTask(task.getId()))
+    allMembers.forEach(member => member.assignNewTask(task.getId()))
     this.memberRepo.save(allMembers)
     return result
   }
