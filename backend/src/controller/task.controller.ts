@@ -4,9 +4,10 @@ import { GetTaskResponse } from './response/get-task-response'
 import { GetTaskUseCase } from '../app/get-task-usecase'
 import { PrismaClient } from '@prisma/client'
 import { TaskQS } from 'src/infra/db/query-service/task-qs'
-import { PostTaskUseCase } from 'src/app/post-task-usecase'
+import { CreateTaskUseCase } from 'src/app/create-task-usecase'
 import { PostTaskRequest } from './request/post-task-request'
 import { TaskRepository } from 'src/infra/db/repository/task-repository'
+import { MemberRepository } from 'src/infra/db/repository/member-repository'
 import { Task } from 'src/domain/entities/Task'
 import { DeleteTaskUseCase } from 'src/app/delete-task-usecase'
 
@@ -27,12 +28,12 @@ export class TaskController {
   }
 
   @Post()
-  @ApiResponse({ status: 200})
+  @ApiResponse({ status: 200, type: GetTaskResponse })
   async postTask(@Body() postTaskDTO: PostTaskRequest): Promise<Task> {
     const prisma = new PrismaClient()
-    const qs = new TaskQS(prisma)
-    const repo = new TaskRepository(prisma)
-    const usecase = new PostTaskUseCase(repo, qs)
+    const taskRepo = new TaskRepository(prisma)
+    const memberRepo = new MemberRepository(prisma)
+    const usecase = new CreateTaskUseCase(taskRepo, memberRepo)
     const task = await usecase.do({ content: postTaskDTO.content })
     return task
   }
