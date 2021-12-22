@@ -18,7 +18,7 @@ export class CreateTaskUseCase {
 
     // Taskの作成
     const task = TaskFactory.create({ content: content } )
-    const result = await this.taskRepo.create(task)
+    const result = await this.taskRepo.save(task)
 
     // TaskMemberの作成
     const allMembers = await this.memberRepo.getAll()
