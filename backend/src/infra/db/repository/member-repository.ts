@@ -35,8 +35,6 @@ export class MemberRepository implements IMemberRepository {
     )
   }
 
-  public async save(member: Member): Promise<Member>
-  public async save(members: Member[]): Promise<Member[]>
   public async save(members: Member | Member[]): Promise<Member | Member[]> {
     if (members instanceof Member) {
       members = [members]
