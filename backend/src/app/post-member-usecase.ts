@@ -32,7 +32,7 @@ export class PostMemberUseCase {
     const member = MemberFactory.create({ ...params })
     team.addMember(member)
 
-    await this.memberRepo.create(member)
+    await this.memberRepo.save(member)
     await this.teamRepo.save(team)
 
     const newMemberDTO = await this.memberQS.getById(member.id)

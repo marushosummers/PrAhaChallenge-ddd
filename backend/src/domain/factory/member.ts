@@ -8,3 +8,10 @@ export class MemberFactory {
     return new Member({ id: createRandomIdString(), name: name, email: email, activityStatus: activityStatus, memberTasks: memberTasks });
   }
 }
+
+export class MemberTaskFactory {
+  public static create(params: { taskId: string }): MemberTask {
+    const { taskId } = params
+    return new MemberTask({ id: createRandomIdString(), taskId: taskId, progressStatus: 'NOTYET' });
+  }
+}
