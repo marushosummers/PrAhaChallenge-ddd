@@ -14,7 +14,4 @@ export class Task {
       content: this.content
     }
   }
-  public getId() {
-    return this.id
-  }
 }
