@@ -60,7 +60,7 @@ export class MemberRepository implements IMemberRepository {
         },
       })
 
-      await Promise.all(member.memberTasks.map(async (task) => {
+      await Promise.all(member.getAllProperties().memberTasks.map(async (task) => {
         const taskProps = task.getAllProperties()
         await this.prismaClient.memberTask.upsert({
           where: {
@@ -81,7 +81,7 @@ export class MemberRepository implements IMemberRepository {
 
       // NOTE: returnされた値のオブジェクトを返すべき？
       const savedMember  = new Member({
-        ...member,
+        ...member.getAllProperties(),
       })
       return savedMember
     }))
