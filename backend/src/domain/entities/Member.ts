@@ -5,7 +5,7 @@ export class Member {
   public readonly name: string
   public readonly email: string
   public readonly activityStatus: ActivityStatus
-  public readonly memberTasks: MemberTask[]
+  private memberTasks: MemberTask[]
 
   public constructor(props: { id: string, name: string, email: string, activityStatus: ActivityStatus, memberTasks: MemberTask[] }) {
     const { id, name, email, activityStatus, memberTasks } = props
@@ -35,6 +35,10 @@ export class Member {
     const newMemberTask = MemberTaskFactory.create({taskId: taskId})
     // TODO: 同じtaskIdがある場合のエラーハンドリング
     this.memberTasks.push(newMemberTask);
+  }
+
+  public deleteTask(taskId: string): void {
+    this.memberTasks = this.memberTasks.filter(memberTask => memberTask.getAllProperties().id !== taskId)
   }
 
   private validateEmail(email: string): void {

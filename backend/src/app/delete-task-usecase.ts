@@ -1,25 +1,27 @@
 import { ITaskRepository } from './repository-interface/task-repository'
-import { ITaskQS } from './query-service-interface/task-qs'
-
+import { IMemberRepository } from './repository-interface/member-repository'
 
 export class DeleteTaskUseCase {
   private readonly taskRepo: ITaskRepository
-  private readonly taskQS: ITaskQS
+  private readonly memberRepo: IMemberRepository
 
-  public constructor(taskRepo: ITaskRepository, taskQS: ITaskQS) {
+  public constructor(taskRepo: ITaskRepository, memberRepo: IMemberRepository) {
     this.taskRepo = taskRepo
-    this.taskQS = taskQS
+    this.memberRepo = memberRepo
   }
 
   public async do(params: { id: string }): Promise<void> {
     const { id } = params
 
-    const task = await this.taskQS.getById(id)
+    const task = await this.taskRepo.getById(id)
 
     if (!task) {
       throw new Error();
     } else {
-      await this.taskRepo.deleteById(task.id);
+      const allMembers = await this.memberRepo.getAll()
+      allMembers.forEach(member => member.deleteTask(task.getId()))
+      await this.memberRepo.save(allMembers)
+      await this.taskRepo.deleteById(task.getId());
     }
   }
 }
