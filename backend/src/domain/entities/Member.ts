@@ -38,7 +38,7 @@ export class Member {
   }
 
   public deleteTask(taskId: string): void {
-    this.memberTasks = this.memberTasks.filter(memberTask => memberTask.getAllProperties().id !== taskId)
+    this.memberTasks = this.memberTasks.filter(memberTask => memberTask.getAllProperties().taskId !== taskId)
   }
 
   private validateEmail(email: string): void {
