@@ -18,9 +18,7 @@ export class DeleteTaskUseCase {
     if (!task) {
       throw new Error();
     } else {
-      const allMembers = await this.memberRepo.getAll()
-      allMembers.forEach(member => member.deleteTask(task.getAllProperties().id))
-      await this.memberRepo.save(allMembers)
+      await this.memberRepo.deleteMemberTasksByTaskId(task.getAllProperties().id)
       await this.taskRepo.deleteById(task.getAllProperties().id);
       return task
     }

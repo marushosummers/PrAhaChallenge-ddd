@@ -93,4 +93,8 @@ export class MemberRepository implements IMemberRepository {
     const deleteMember = this.prismaClient.member.delete({ where: { id: id } })
     await this.prismaClient.$transaction([deleteMemberTasks, deleteMember])
   }
+  public async deleteMemberTasksByTaskId(taskId: string): Promise<void> {
+    await this.prismaClient.memberTask.deleteMany({ where: { taskId: taskId } })
+  }
+
 }
