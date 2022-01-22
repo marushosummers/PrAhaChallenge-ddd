@@ -7,6 +7,7 @@ import { TaskRepository } from '../../infra/db/repository/task-repository'
 import { MemberRepository } from 'src/infra/db/repository/member-repository'
 import { mocked } from 'ts-jest/utils'
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'
+import { DeleteTaskUseCase } from '../delete-task-usecase'
 
 jest.mock('@prisma/client')
 jest.mock('src/infra/db/repository/task-repository.ts')
@@ -35,12 +36,12 @@ describe('do', () => {
 
       mockTask = mocked(new Task({ id: taskId, content: content}), true)
       mockMember = mocked(new Member({ id: memberId, name: name, email: email, activityStatus: activityStatus, memberTasks: memberTasks}), true)
-      mockTaskRepository.save.mockResolvedValueOnce(mockTask)
-      mockMemberRepository.save.mockResolvedValueOnce([mockMember])
-      mockMemberRepository.getAll.mockResolvedValueOnce([mockMember])
+      mockTaskRepository.getById.mockResolvedValueOnce(mockTask)
 
-      const usecase = new CreateTaskUseCase(mockTaskRepository, mockMemberRepository)
-      expect(usecase.do({ content: content })).resolves.toStrictEqual(expectedReponse)
+      const usecase = new DeleteTaskUseCase(mockTaskRepository, mockMemberRepository)
+      await expect(usecase.do({ id: taskId })).resolves.toEqual(mockTask)
+      expect(mockMemberRepository.deleteMemberTasksByTaskId).toHaveBeenCalled()
+      expect(mockTaskRepository.deleteById).toHaveBeenCalled()
     })
   })
 })
