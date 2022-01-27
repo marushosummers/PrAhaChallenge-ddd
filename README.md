@@ -61,6 +61,12 @@ curl -X POST -H "Content-Type: application/json" -d '{"name":"Sample Name", "ema
 ```
 curl -X POST -H "Content-Type: application/json" -d '{"content":"データベースを触ってみよう"}' localhost:3000/task
 ```
+
+- MemberTask Update
+```
+curl -X PATCH -H "Content-Type: application/json" -d '{"taskProgressStatus":"DONE"}' localhost:3000/member/445dd3bc-25dc-4585-a7f4-bc6c82dc445b/task/fe8bba18-b508-4258-981e-4a3c9ab1605b
+```
+
 ## Dockerによる環境構築
 
 ```

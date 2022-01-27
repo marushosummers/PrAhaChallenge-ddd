@@ -37,6 +37,15 @@ export class Member {
     this.memberTasks.push(newMemberTask);
   }
 
+  public updateTaskProgressStatus(memberTaskId: string, status: TaskProgressStatus): void{
+    const memberTask = this.memberTasks.find(memberTask => memberTask.getAllProperties().id == memberTaskId)
+    if (memberTask) {
+      memberTask.setProgressStatus(status)
+    } else {
+      throw new Error("Not Found.")
+    }
+  }
+
   public deleteTask(taskId: string): void {
     this.memberTasks = this.memberTasks.filter(memberTask => memberTask.getAllProperties().taskId !== taskId)
   }
@@ -67,6 +76,10 @@ export class MemberTask {
     this.id = id;
     this.taskId = taskId;
     this.progressStatus = progressStatus;
+  }
+
+  public setProgressStatus(status: TaskProgressStatus) {
+    this.progressStatus = status;
   }
 
   public getAllProperties() {
