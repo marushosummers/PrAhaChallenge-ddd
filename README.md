@@ -50,6 +50,17 @@
 - [ ] ただし一度「完了」にした進捗ステータスを「レビュー待ち」「未着手」に戻すことはできない
 - [ ] 進捗ステータスを変更できるのは、課題の所有者だけ
 
+# curl samples
+
+- Member Create
+```
+curl -X POST -H "Content-Type: application/json" -d '{"name":"Sample Name", "email": "sample@example.com"}' localhost:3000/member
+```
+
+- Task Create
+```
+curl -X POST -H "Content-Type: application/json" -d '{"content":"データベースを触ってみよう"}' localhost:3000/task
+```
 ## Dockerによる環境構築
 
 ```

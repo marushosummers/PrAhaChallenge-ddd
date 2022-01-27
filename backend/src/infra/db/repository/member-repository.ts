@@ -54,6 +54,7 @@ export class MemberRepository implements IMemberRepository {
           activityStatus: memberProps.activityStatus
         },
         create: {
+          id: memberProps.id,
           name: memberProps.name,
           email: memberProps.email,
           activityStatus: memberProps.activityStatus
@@ -72,6 +73,7 @@ export class MemberRepository implements IMemberRepository {
             progressStatus: taskProps.progressStatus,
           },
           create: {
+            id: taskProps.id,
             memberId: memberProps.id,
             taskId: taskProps.taskId,
             progressStatus: taskProps.progressStatus,
