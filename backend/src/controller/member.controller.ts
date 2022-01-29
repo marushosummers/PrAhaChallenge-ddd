@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetMemberResponse } from './response/get-member-response'
 import { GetMemberUseCase } from '../app/get-member-usecase'
@@ -11,6 +11,7 @@ import { CreateMemberUseCase } from 'src/app/create-member-usecase'
 import { TaskRepository } from 'src/infra/db/repository/task-repository'
 import { PatchMemberTaskRequest } from './request/patch-member-task-request'
 import { UpdateMemberTaskUseCase } from 'src/app/update-member-task-usecase'
+import { DeleteMmeberUseCase } from 'src/app/delete-member-usecase'
 
 @Controller({
   path: '/member',
@@ -73,6 +74,16 @@ export class MemberController {
         );
       }
     }
+  }
+
+  @Delete("/:id")
+  @ApiResponse({ status: 200 })
+  async deleteMember(@Param("id") id: string): Promise<Member> {
+    const prisma = new PrismaClient()
+    const memberRepo = new MemberRepository(prisma)
+    const usecase = new DeleteMmeberUseCase(memberRepo)
+    const member = await usecase.do({ id: id })
+    return member
   }
 }
 
