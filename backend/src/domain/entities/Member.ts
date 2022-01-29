@@ -50,10 +50,10 @@ export class Member {
     this.memberTasks.push(newMemberTask);
   }
 
-  public updateTaskProgressStatus(memberTaskId: string, status: TaskProgressStatus): void{
+  public updateTaskProgressStatus(memberTaskId: string, taskProgressStatus: TaskProgressStatus): void{
     const memberTask = this.memberTasks.find(memberTask => memberTask.getAllProperties().id == memberTaskId)
     if (memberTask) {
-      memberTask.setProgressStatus(status)
+      memberTask.setProgressStatus(taskProgressStatus)
     } else {
       throw new Error("Not Found.")
     }
@@ -91,8 +91,11 @@ export class MemberTask {
     this.progressStatus = progressStatus;
   }
 
-  public setProgressStatus(status: TaskProgressStatus) {
-    this.progressStatus = status;
+  public setProgressStatus(taskProgressStatus: TaskProgressStatus) {
+    if (this.progressStatus === "DONE" && taskProgressStatus !== "DONE") {
+      throw new Error("Task is already done.")
+    }
+    this.progressStatus = taskProgressStatus;
   }
 
   public getAllProperties() {
