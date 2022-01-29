@@ -67,6 +67,35 @@ export class MemberRepository implements IMemberRepository {
       }):null
   }
 
+
+  public async getByEmail(email: string): Promise<Member | null> {
+    const member = await this.prismaClient.member.findUnique({
+      where: {
+        email: email
+      },
+      include: {
+        pair: true,
+        memberTasks: {
+          include: { task: true },
+        },
+      }
+    })
+    return member ?
+      new Member({
+        id: member.id,
+        name: member.name,
+        email: member.email,
+        activityStatus: member.activityStatus,
+        memberTasks: member.memberTasks.map((task) => {
+          return new MemberTask({
+            id: task.id,
+            taskId: task.taskId,
+            progressStatus: task.progressStatus as TaskProgressStatus // NOTE: これはasの処理でいいのか？
+          })
+        })
+      }) : null
+  }
+
   public async save(members: Member | Member[]): Promise<Member | Member[]> {
     if (members instanceof Member) {
       members = [members]

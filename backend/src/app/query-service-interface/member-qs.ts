@@ -40,6 +40,5 @@ export class MemberDetailDTO {
 
 export interface IMemberQS {
   getAll(): Promise<MemberDTO[]>
-  getByEmail(email: string): Promise<MemberDTO | null>
   getById(id: string): Promise<MemberDetailDTO | null>
 }
