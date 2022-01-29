@@ -90,7 +90,7 @@ export class MemberController {
     const usecase = new UpdateMemberTaskUseCase(memberRepo)
 
     try {
-      const member = await usecase.do({ id: id, memberTaskId: memberTaskId, status: patchMemberTaskDTO.taskProgressStatus })
+      const member = await usecase.do({ id: id, memberTaskId: memberTaskId, taskProgressStatus: patchMemberTaskDTO.taskProgressStatus })
       return member
     } catch (e) {
       if (e instanceof Error) {

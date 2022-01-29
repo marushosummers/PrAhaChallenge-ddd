@@ -34,7 +34,7 @@ export class SearchProgressQS implements ISearchProgressQS {
           id: SearchProgressDM.id,
           taskId: SearchProgressDM.task.id,
           taskContent: SearchProgressDM.task.content,
-          status: SearchProgressDM.progressStatus,
+          taskProgressStatus: SearchProgressDM.progressStatus,
           memberId: SearchProgressDM.member.id,
           memberName: SearchProgressDM.member.name
         }),
@@ -98,7 +98,7 @@ export class SearchProgressQS implements ISearchProgressQS {
           id: SearchProgressDM.id,
           taskId: SearchProgressDM.task.id,
           taskContent: SearchProgressDM.task.content,
-          status: SearchProgressDM.progressStatus,
+          taskProgressStatus: SearchProgressDM.progressStatus,
           memberId: SearchProgressDM.member.id,
           memberName: SearchProgressDM.member.name
         }),

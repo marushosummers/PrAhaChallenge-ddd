@@ -4,15 +4,16 @@ export class SearchProgressDTO {
   public readonly taskContent: string
   public readonly memberId: string
   public readonly memberName: string
-  public readonly status: string
-  public constructor(props: { id: string, taskId: string; taskContent: string, memberId: string, memberName: string, status: string }) {
-    const { id, taskId, taskContent: taskContent, memberId, memberName, status } = props
+  public readonly taskProgressStatus: string
+  public constructor(props: { id: string, taskId: string; taskContent: string, memberId: string, memberName: string, taskProgressStatus: string }) {
+    const { id, taskId, taskContent: taskContent, memberId, memberName, taskProgressStatus
+} = props
     this.id = id
     this.taskId = taskId
     this.taskContent = taskContent
     this.memberId = memberId
     this.memberName = memberName
-    this.status = status
+    this.taskProgressStatus = taskProgressStatus
   }
 }
 export interface ISearchProgressQS {
