@@ -2,9 +2,9 @@ import { MemberTaskFactory } from "../factory/member"
 
 export class Member {
   public readonly id: string
-  public readonly name: string
-  public readonly email: string
-  public readonly activityStatus: ActivityStatus
+  private name: string
+  private email: string
+  private activityStatus: ActivityStatus
   private memberTasks: MemberTask[]
 
   public constructor(props: { id: string, name: string, email: string, activityStatus: ActivityStatus, memberTasks: MemberTask[] }) {
@@ -29,6 +29,19 @@ export class Member {
       activityStatus: this.activityStatus,
       memberTasks: this.memberTasks,
     }
+  }
+
+  public setName(name: string): void {
+    this.name = name;
+  }
+
+  public setEmail(email: string): void {
+    this.validateEmail(email)
+    this.email = email;
+  }
+  public setActivityStatus(activityStatus: ActivityStatus): void {
+    // TODO: Pairとの依存関係を入れる
+    this.activityStatus = activityStatus;
   }
 
   public assignNewTask(taskId: string): void{
