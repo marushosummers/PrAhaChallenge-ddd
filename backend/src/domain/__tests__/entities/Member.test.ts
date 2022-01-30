@@ -1,5 +1,20 @@
 import * as faker from 'faker'
-import { MemberTask } from "../../entities/Member";
+import { Member, MemberTask } from "../../entities/Member";
+import { CreateMember } from "../helper/Member";
+
+describe("Member", () => {
+  describe("deleteTask", () => {
+    describe("OK", () => {
+      test("存在するTaskIdを削除する", () => {
+        const member: Member = CreateMember();
+        const memberTasks: MemberTask[] = member.getAllProperties().memberTasks;
+        const deleteTaskId = memberTasks[0]!.getAllProperties().taskId
+        member.deleteTask(deleteTaskId)
+        expect(member.getAllProperties().memberTasks.length).toBe(memberTasks.length - 1)
+      });
+    });
+  });
+});
 
 describe("MemberTask", () => {
   describe("インスタンスの生成", () => {

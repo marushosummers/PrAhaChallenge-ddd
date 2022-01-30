@@ -4,4 +4,5 @@ export interface IMemberRepository {
   getAll(): Promise<Member[]>
 
   save(members: Member | Member[]): Promise<Member | Member[]>
+  deleteMemberTasksByTaskId(taskId: string): Promise<void>
 }

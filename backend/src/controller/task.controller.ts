@@ -40,12 +40,12 @@ export class TaskController {
 
   @Delete("/:id")
   @ApiResponse({ status: 200 })
-  async deleteTask(@Param("id") id: string): Promise<void> {
+  async deleteTask(@Param("id") id: string): Promise<Task> {
     const prisma = new PrismaClient()
-    const qs = new TaskQS(prisma)
-    const repo = new TaskRepository(prisma)
-    const usecase = new DeleteTaskUseCase(repo, qs)
-    await usecase.do({ id: id })
+    const taskRepo = new TaskRepository(prisma)
+    const memberRepo = new MemberRepository(prisma)
+    const usecase = new DeleteTaskUseCase(taskRepo, memberRepo)
+    const task = await usecase.do({ id: id })
+    return task
   }
 }
-
