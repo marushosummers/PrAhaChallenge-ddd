@@ -7,7 +7,7 @@ export class GetSearchProgressResponse {
 
   public constructor(params: { progresses: SearchProgressDTO[] }) {
     const { progresses } = params
-    this.progresses = progresses.map(({ id, taskId, taskContent, memberId, memberName, status }) => {
+    this.progresses = progresses.map(({ id, taskId, taskContent, memberId, memberName, taskProgressStatus}) => {
       const task = new Task({ id: taskId, content: taskContent })
       const member = new Member({ id: memberId, name: memberName})
       return new Progress({

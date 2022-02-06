@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetMemberResponse } from './response/get-member-response'
 import { GetMemberUseCase } from '../app/get-member-usecase'
 import { PrismaClient } from '@prisma/client'
 import { MemberQS } from 'src/infra/db/query-service/member-qs'
+import { PostMemberRequest } from './request/post-member-request'
+import { Member } from 'src/domain/entities/Member'
+import { MemberRepository } from 'src/infra/db/repository/member-repository'
+import { CreateMemberUseCase } from 'src/app/create-member-usecase'
+import { TaskRepository } from 'src/infra/db/repository/task-repository'
+import { PatchMemberTaskRequest } from './request/patch-member-task-request'
+import { UpdateMemberTaskUseCase } from 'src/app/update-member-task-usecase'
+import { DeleteMemberUseCase } from 'src/app/delete-member-usecase'
+import { PutMemberRequest } from './request/put-member-request'
+import { UpdateMemberUseCase } from 'src/app/update-member-usecase'
 
 @Controller({
   path: '/member',
@@ -19,6 +29,98 @@ export class MemberController {
     const result = await usecase.do()
     const response = new GetMemberResponse({ members: result })
     return response
+  }
+
+  @Post()
+  @ApiResponse({ status: 200, type: GetMemberResponse })
+  async postMember(@Body() postMemberDTO: PostMemberRequest): Promise<Member> {
+    const prisma = new PrismaClient()
+    const memberRepo = new MemberRepository(prisma)
+    const taskRepo = new TaskRepository(prisma)
+    const usecase = new CreateMemberUseCase(memberRepo, taskRepo)
+    const member = await usecase.do({ name: postMemberDTO.name, email: postMemberDTO.email})
+    return member
+  }
+
+  @Put('/:id')
+  @ApiResponse({ status: 200, type: Member })
+  @ApiResponse({ status: 500 })
+  async PutMember(
+    @Param('id') id: string,
+    @Body() putMemberDTO: PutMemberRequest,
+  ): Promise<Member> {
+    const prisma = new PrismaClient()
+    const memberRepo = new MemberRepository(prisma)
+    const usecase = new UpdateMemberUseCase(memberRepo)
+
+    try {
+      const member = await usecase.do({ id: id, name: putMemberDTO.name, email: putMemberDTO.email, activityStatus: putMemberDTO.activityStatus })
+      return member
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: e.message,
+          },
+          500,
+        );
+      } else {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: "Internal server error",
+          },
+          500,
+        );
+      }
+    }
+  }
+
+  @Patch('/:id/task/:memberTaskId')
+  @ApiResponse({ status: 200, type: Member })
+  @ApiResponse({ status: 500 })
+  async PatchMemberTask(
+    @Param('id') id: string,
+    @Param('memberTaskId') memberTaskId: string,
+    @Body() patchMemberTaskDTO: PatchMemberTaskRequest,
+  ): Promise<Member> {
+    const prisma = new PrismaClient()
+    const memberRepo = new MemberRepository(prisma)
+    const usecase = new UpdateMemberTaskUseCase(memberRepo)
+
+    try {
+      const member = await usecase.do({ id: id, memberTaskId: memberTaskId, taskProgressStatus: patchMemberTaskDTO.taskProgressStatus })
+      return member
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: e.message,
+          },
+          500,
+        );
+      } else {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: "Internal server error",
+          },
+          500,
+        );
+      }
+    }
+  }
+
+  @Delete("/:id")
+  @ApiResponse({ status: 200 })
+  async deleteMember(@Param("id") id: string): Promise<Member> {
+    const prisma = new PrismaClient()
+    const memberRepo = new MemberRepository(prisma)
+    const usecase = new DeleteMemberUseCase(memberRepo)
+    const member = await usecase.do({ id: id })
+    return member
   }
 }
 

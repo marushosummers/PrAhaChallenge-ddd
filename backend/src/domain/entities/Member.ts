@@ -2,9 +2,9 @@ import { MemberTaskFactory } from "../factory/member"
 
 export class Member {
   public readonly id: string
-  public readonly name: string
-  public readonly email: string
-  public readonly activityStatus: ActivityStatus
+  private name: string
+  private email: string
+  private activityStatus: ActivityStatus
   private memberTasks: MemberTask[]
 
   public constructor(props: { id: string, name: string, email: string, activityStatus: ActivityStatus, memberTasks: MemberTask[] }) {
@@ -31,10 +31,32 @@ export class Member {
     }
   }
 
+  public setName(name: string): void {
+    this.name = name;
+  }
+
+  public setEmail(email: string): void {
+    this.validateEmail(email)
+    this.email = email;
+  }
+  public setActivityStatus(activityStatus: ActivityStatus): void {
+    // TODO: Pairとの依存関係を入れる
+    this.activityStatus = activityStatus;
+  }
+
   public assignNewTask(taskId: string): void{
     const newMemberTask = MemberTaskFactory.create({taskId: taskId})
     // TODO: 同じtaskIdがある場合のエラーハンドリング
     this.memberTasks.push(newMemberTask);
+  }
+
+  public updateTaskProgressStatus(memberTaskId: string, taskProgressStatus: TaskProgressStatus): void{
+    const memberTask = this.memberTasks.find(memberTask => memberTask.getAllProperties().id == memberTaskId)
+    if (memberTask) {
+      memberTask.setProgressStatus(taskProgressStatus)
+    } else {
+      throw new Error("Not Found.")
+    }
   }
 
   public deleteTask(taskId: string): void {
@@ -67,6 +89,13 @@ export class MemberTask {
     this.id = id;
     this.taskId = taskId;
     this.progressStatus = progressStatus;
+  }
+
+  public setProgressStatus(taskProgressStatus: TaskProgressStatus) {
+    if (this.progressStatus === "DONE" && taskProgressStatus !== "DONE") {
+      throw new Error("Task is already done.")
+    }
+    this.progressStatus = taskProgressStatus;
   }
 
   public getAllProperties() {

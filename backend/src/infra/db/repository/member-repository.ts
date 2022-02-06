@@ -35,6 +35,67 @@ export class MemberRepository implements IMemberRepository {
     )
   }
 
+  public async getById(id: string): Promise<Member | null> {
+    const member = await this.prismaClient.member.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        pair: true,
+      }
+    })
+
+    const memberTasks = await this.prismaClient.memberTask.findMany({
+      where: {
+        memberId: id
+      }
+    })
+
+    return member ?
+      new Member({
+        id: member.id,
+        name: member.name,
+        email: member.email,
+        activityStatus: member.activityStatus,
+        memberTasks: memberTasks.map((task) => {
+          return new MemberTask({
+            id: task.id,
+            taskId: task.taskId,
+            progressStatus: task.progressStatus as TaskProgressStatus // NOTE: これはasの処理でいいのか？
+          })
+        })
+      }):null
+  }
+
+
+  public async getByEmail(email: string): Promise<Member | null> {
+    const member = await this.prismaClient.member.findUnique({
+      where: {
+        email: email
+      },
+      include: {
+        pair: true,
+        memberTasks: {
+          include: { task: true },
+        },
+      }
+    })
+    return member ?
+      new Member({
+        id: member.id,
+        name: member.name,
+        email: member.email,
+        activityStatus: member.activityStatus,
+        memberTasks: member.memberTasks.map((task) => {
+          return new MemberTask({
+            id: task.id,
+            taskId: task.taskId,
+            progressStatus: task.progressStatus as TaskProgressStatus // NOTE: これはasの処理でいいのか？
+          })
+        })
+      }) : null
+  }
+
   public async save(members: Member | Member[]): Promise<Member | Member[]> {
     if (members instanceof Member) {
       members = [members]
@@ -54,6 +115,7 @@ export class MemberRepository implements IMemberRepository {
           activityStatus: memberProps.activityStatus
         },
         create: {
+          id: memberProps.id,
           name: memberProps.name,
           email: memberProps.email,
           activityStatus: memberProps.activityStatus
@@ -72,6 +134,7 @@ export class MemberRepository implements IMemberRepository {
             progressStatus: taskProps.progressStatus,
           },
           create: {
+            id: taskProps.id,
             memberId: memberProps.id,
             taskId: taskProps.taskId,
             progressStatus: taskProps.progressStatus,
@@ -93,6 +156,7 @@ export class MemberRepository implements IMemberRepository {
     const deleteMember = this.prismaClient.member.delete({ where: { id: id } })
     await this.prismaClient.$transaction([deleteMemberTasks, deleteMember])
   }
+
   public async deleteMemberTasksByTaskId(taskId: string): Promise<void> {
     await this.prismaClient.memberTask.deleteMany({ where: { taskId: taskId } })
   }

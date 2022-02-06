@@ -1,6 +1,6 @@
 import * as faker from 'faker'
 import { Member, MemberTask } from "../../entities/Member";
-import { CreateMember } from "../helper/Member";
+import { CreateMember } from "../helper/member";
 
 describe("Member", () => {
   describe("deleteTask", () => {

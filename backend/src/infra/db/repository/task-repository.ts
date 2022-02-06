@@ -42,6 +42,16 @@ export class TaskRepository implements ITaskRepository {
     return taskEntity
   }
 
+
+  public async getAll(): Promise<Task[] | null> {
+    const allTasks = await this.prismaClient.task.findMany()
+    return allTasks.map(
+      (TaskDM) =>
+        new Task({
+          ...TaskDM,
+        }),
+    )}
+
   public async deleteById(id: string): Promise<void> {
     const deleteMemberTasks = this.prismaClient.memberTask.deleteMany({ where: { taskId: id } })
     const deleteTask = this.prismaClient.task.delete({ where: { id: id } })

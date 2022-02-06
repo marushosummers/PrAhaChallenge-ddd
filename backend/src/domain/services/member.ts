@@ -1,17 +1,15 @@
-import { IMemberQS } from "src/app/query-service-interface/member-qs";
+import { IMemberRepository } from "src/app/repository-interface/member-repository";
 import { Member } from "../entities/Member";
 
-
 export class MemberService {
-  private readonly memberQs: IMemberQS;
 
-  public constructor(memberQs: IMemberQS) {
-    this.memberQs = memberQs;
-  }
+  public static isSameEmailExist = async (email: string, memberRepo: IMemberRepository): Promise<boolean> => {
+    const sameEmailMember = await memberRepo.getByEmail(email);
 
-  public isSameEmailExist = async (email: string): Promise<boolean> => {
-    const result = await this.memberQs.getByEmail(email);
-
-    return Boolean(result);
+    if (sameEmailMember) {
+      return true
+    } else {
+      return false
+    }
   };
 }

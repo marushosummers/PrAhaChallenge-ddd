@@ -17,7 +17,7 @@
 
 - 課題
   - [x] 新規追加
-  - [ ] 更新（少なくとも進捗ステータスを変更できること）
+  - [x] 更新（少なくとも進捗ステータスを変更できること）
   - [x] 削除
 
 - 検索
@@ -47,8 +47,24 @@
 - [x] 課題には、参加者ごとに進捗ステータスがある
 - [x] 進捗ステータスは「未着手、レビュー待ち、完了」いずれかの値を持つ
 - [x] 進捗ステータスはいつでも変更可能
-- [ ] ただし一度「完了」にした進捗ステータスを「レビュー待ち」「未着手」に戻すことはできない
-- [ ] 進捗ステータスを変更できるのは、課題の所有者だけ
+- [x] ただし一度「完了」にした進捗ステータスを「レビュー待ち」「未着手」に戻すことはできない
+
+# curl samples
+
+- Member Create
+```
+curl -X POST -H "Content-Type: application/json" -d '{"name":"Sample Name", "email": "sample@example.com"}' localhost:3000/member
+```
+
+- Task Create
+```
+curl -X POST -H "Content-Type: application/json" -d '{"content":"データベースを触ってみよう"}' localhost:3000/task
+```
+
+- MemberTask Update
+```
+curl -X PATCH -H "Content-Type: application/json" -d '{"taskProgressStatus":"DONE"}' localhost:3000/member/445dd3bc-25dc-4585-a7f4-bc6c82dc445b/task/fe8bba18-b508-4258-981e-4a3c9ab1605b
+```
 
 ## Dockerによる環境構築
 
