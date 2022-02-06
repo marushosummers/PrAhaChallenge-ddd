@@ -11,7 +11,7 @@ import { CreateMemberUseCase } from 'src/app/create-member-usecase'
 import { TaskRepository } from 'src/infra/db/repository/task-repository'
 import { PatchMemberTaskRequest } from './request/patch-member-task-request'
 import { UpdateMemberTaskUseCase } from 'src/app/update-member-task-usecase'
-import { DeleteMmeberUseCase } from 'src/app/delete-member-usecase'
+import { DeleteMemberUseCase } from 'src/app/delete-member-usecase'
 import { PutMemberRequest } from './request/put-member-request'
 import { UpdateMemberUseCase } from 'src/app/update-member-usecase'
 
@@ -118,7 +118,7 @@ export class MemberController {
   async deleteMember(@Param("id") id: string): Promise<Member> {
     const prisma = new PrismaClient()
     const memberRepo = new MemberRepository(prisma)
-    const usecase = new DeleteMmeberUseCase(memberRepo)
+    const usecase = new DeleteMemberUseCase(memberRepo)
     const member = await usecase.do({ id: id })
     return member
   }
