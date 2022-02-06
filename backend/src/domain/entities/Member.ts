@@ -92,7 +92,11 @@ export class MemberTask {
   }
 
   public setProgressStatus(taskProgressStatus: TaskProgressStatus) {
-    if (this.progressStatus === "DONE" && taskProgressStatus !== "DONE") {
+    if (this.progressStatus === taskProgressStatus) {
+      // Already same status.
+      return
+    }
+    if (this.progressStatus === "DONE") {
       throw new Error("Task is already done.")
     }
     this.progressStatus = taskProgressStatus;
