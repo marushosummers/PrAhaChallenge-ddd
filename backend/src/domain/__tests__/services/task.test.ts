@@ -16,7 +16,7 @@ describe('isExist', () => {
     const id = "testId"
     const taskService = new TaskService(mockTaskQS)
 
-    expect(taskService.isExist(id)).resolves.toBeInstanceOf(Boolean)
+    await expect(taskService.isExist(id)).resolves.toEqual(false)
     expect(mockTaskQS.getById).toHaveBeenCalled()
   })
 })

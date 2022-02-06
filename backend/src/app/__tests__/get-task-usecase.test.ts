@@ -15,13 +15,13 @@ describe('do', () => {
   })
   it('[正常系]: 例外が発生しない', async () => {
     const usecase = new GetTaskUseCase(mockTaskQS)
-    expect(usecase.do()).resolves.toBe(undefined)
+    return expect(usecase.do()).resolves.toBe(undefined)
   })
   it('[異常系]: 例外が発生した場合、例外が発生する', () => {
     const ERROR_MESSAGE = 'error!'
     mockTaskQS.getAll.mockRejectedValueOnce(ERROR_MESSAGE)
     const usecase = new GetTaskUseCase(mockTaskQS)
-    expect(
+    return expect(
       usecase.do(),
     ).rejects.toEqual(ERROR_MESSAGE)
   })
