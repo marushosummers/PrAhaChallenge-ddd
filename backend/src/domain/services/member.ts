@@ -3,15 +3,13 @@ import { Member } from "../entities/Member";
 
 export class MemberService {
 
-  public static isSameEmailExist = async (member: Member, email: string, memberRepo: IMemberRepository): Promise<boolean> => {
-    const result = await memberRepo.getByEmail(email);
+  public static isSameEmailExist = async (email: string, memberRepo: IMemberRepository): Promise<boolean> => {
+    const sameEmailMember = await memberRepo.getByEmail(email);
 
-    if (!result) {
-      return false
-    } else if (result.id === member.getAllProperties().id) {
-      return false
-    } else {
+    if (sameEmailMember) {
       return true
+    } else {
+      return false
     }
   };
 }

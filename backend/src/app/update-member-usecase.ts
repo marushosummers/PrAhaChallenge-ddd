@@ -25,13 +25,18 @@ export class UpdateMemberUseCase {
       throw new Error("Not Found.")
     }
 
-    if (await MemberService.isSameEmailExist(member, email, this.memberRepo)) {
+    // Email Check
+    if (member.getAllProperties().email === email) {
+      // Email will not be updated.
+      // Skip Email Check.
+    } else if (await MemberService.isSameEmailExist(email, this.memberRepo)) {
       throw new Error("Email is already used.")
     }
 
     member.setName(name)
     member.setEmail(email)
-    // TODO: Pairの制約を入れる
+
+    // TODO: 在籍ステータスによってPairから抜ける/入るの制約を入れる
     member.setActivityStatus(activityStatus)
 
     const savedMember = await this.memberRepo.save(member) as Member
