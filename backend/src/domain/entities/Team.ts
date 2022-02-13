@@ -43,6 +43,13 @@ export class Team {
     }
   };
 
+  private validateTeamMemberCount(): void {
+    const memberCount = this.getMemberCount()
+    if (!(memberCount >= this.MIN_MEMBER)) {
+      throw new Error("Team should have at least 2 members.");
+    }
+  };
+
   public addMember(member: Member): void {
     // NOTE: 加入させるペアを調べる
     let pair = this.getJoinablePair()
@@ -59,6 +66,24 @@ export class Team {
 
     // TODO: ペアに加入
     pair.addMember(member)
+  }
+
+  public addPair = (pair: Pair): void => {
+    this.pairs.push(pair)
+    this.validateTeamMemberCount()
+  }
+
+  public deletePair = (pairId: string): void => {
+    this.pairs = this.pairs.filter(pair => pair.id !== pairId)
+    this.validateTeamMemberCount()
+  }
+
+  public getPairCount = (): number => {
+    return this.pairs.length;
+  }
+
+  public getMemberCount = (): number => {
+    return this.pairs.reduce((prev, current) => prev + current.memberIds.length, 0);
   }
 
   public getJoinablePair(): Pair | undefined {

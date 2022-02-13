@@ -22,15 +22,19 @@ export class TeamService {
 
   public getMinMemberTeam = async (): Promise<Team> => {
     const teams = await this.teamRepository.getAll()
-    return  teams.reduce((prev, current) => ((this.getTeamMemberCount(prev) < this.getTeamMemberCount(current)) ? prev : current));
+    return  teams.reduce((prev, current) => ((prev.getMemberCount() < current.getMemberCount()) ? prev : current));
   };
 
-  public getTeamMemberCount = (team: Team): number => {
-    const { pairs } = team.getAllProperties()
-    return pairs.reduce((prev, current) => prev + current.memberIds.length, 0);
-  }
+  public movePair = async (pair: Pair, newTeam: Team): Promise<void> => {
+    const pairId = pair.getAllProperties().id;
+    const oldTeam = await this.teamRepository.getByPairId(pairId);
+    if (!oldTeam) {
+      throw new Error("Not Found.");
+    }
 
-  public getPairMemberCount = (pair: Pair): number => {
-    return pair.memberIds.length
+    oldTeam.deletePair(pairId);
+    newTeam.addPair(pair);
+
+    await this.teamRepository.save(newTeam);
   };
 }
