@@ -1,24 +1,21 @@
-import { ITeamQS } from "src/app/query-service-interface/team-qs";
 import { ITeamRepository } from "src/app/repository-interface/team-repository";
 import { Pair, Team } from "../entities/Team";
 
 export class TeamService {
-  private readonly teamQs: ITeamQS;
   private readonly teamRepository: ITeamRepository;
 
-  public constructor(teamQs: ITeamQS, teamRepository: ITeamRepository) {
-    this.teamQs = teamQs;
+  public constructor(teamRepository: ITeamRepository) {
     this.teamRepository = teamRepository;
   }
 
   public isExist = async (id: string): Promise<boolean> => {
-    const result = await this.teamQs.getById(id);
+    const result = await this.teamRepository.getById(id);
 
     return Boolean(result);
   };
 
   public isSameNameExist = async (name: number): Promise<boolean> => {
-    const result = await this.teamQs.getByName(name);
+    const result = await this.teamRepository.getByName(name);
 
     return Boolean(result);
   };

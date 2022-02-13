@@ -50,13 +50,38 @@ export class TeamRepository implements ITeamRepository {
       return null
     }
 
-    const TeamEntity = new Team({
+    return new Team({
       id: team.id,
       name: team.name,
       pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
     })
+  }
 
-    return TeamEntity
+  public async getByName(name: number): Promise<Team | null> {
+    const team = await this.prismaClient.team.findUnique({
+      include: {
+        pairs: {
+          select: {
+            id: true,
+            name: true,
+            members: true
+          },
+        },
+      },
+      where: {
+        name: name
+      }
+    })
+
+    if (!team) {
+      return null
+    }
+
+    return new Team({
+      id: team.id,
+      name: team.name,
+      pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
+    })
   }
 
   public async getByPairId(pairId: string): Promise<Team | null> {
