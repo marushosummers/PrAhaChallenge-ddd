@@ -25,13 +25,15 @@ export class TeamService {
     return  teams.reduce((prev, current) => ((prev.getMemberCount() < current.getMemberCount()) ? prev : current));
   };
 
-  public movePair = async (pair: Pair, newTeam: Team): Promise<void> => {
-    const pairId = pair.getAllProperties().id;
+  public movePair = async (pairId: string, newTeamId: string): Promise<void> => {
     const oldTeam = await this.teamRepository.getByPairId(pairId);
-    if (!oldTeam) {
+    const newTeam = await this.teamRepository.getById(newTeamId);
+
+    if (!(oldTeam && newTeam)) {
       throw new Error("Not Found.");
     }
 
+    const pair = oldTeam.getPair(pairId);
     oldTeam.deletePair(pairId);
     newTeam.addPair(pair);
 

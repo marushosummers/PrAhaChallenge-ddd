@@ -32,6 +32,14 @@ export class Team {
     return this.name
   }
 
+  public getPair(pairId: string) {
+    const pair = this.pairs.find(pair => pair.id === pairId)
+    if (!pair) {
+      throw new Error("Not Found.")
+    }
+    return pair
+  }
+
   public setName(name: number) {
     this.validateName(name)
     this.name = name
