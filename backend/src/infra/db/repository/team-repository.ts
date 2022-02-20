@@ -129,7 +129,7 @@ export class TeamRepository implements ITeamRepository {
   public async save(team: Team): Promise<void> {
     const { id, name, pairs } = team.getAllProperties()
 
-    const saveTeam = await this.prismaClient.team.update({
+    const savedTeam = await this.prismaClient.team.update({
       where: {
         id: id,
       },
@@ -138,22 +138,28 @@ export class TeamRepository implements ITeamRepository {
       },
     })
 
-    console.log(saveTeam)
+    console.log(savedTeam)
 
-    const savePairs = await Promise.all(pairs.map(async (pair) => {
-      const savePair = await this.prismaClient.pair.update({
+    const savedPairs = await Promise.all(pairs.map(async (pair) => {
+      const savedPair = await this.prismaClient.pair.upsert({
         where: {
           id: pair.id,
         },
-        data: {
+        update: {
           name: pair.name,
           teamId: id
         },
+        create: {
+          id: pair.id,
+          name: pair.name,
+          teamId: id
+        }
       })
-      console.log(savePair)
+      console.log("savePair", savedPair)
 
+      // TODO: Memberの所属は別テーブルで持った方が綺麗
       const savedMembers = await Promise.all(pair.getAllProperties().memberIds.map(async (memberId) => {
-        const saveMember = await this.prismaClient.member.update({
+        const savedMember = await this.prismaClient.member.update({
           where: {
             id: memberId,
           },
@@ -161,10 +167,9 @@ export class TeamRepository implements ITeamRepository {
             pairId: pair.id
           },
         })
-        console.log(saveMember)
+        return savedMember
       }))
-      console.log(savedMembers)
+      return savedMembers
     }))
-    console.log(savePairs)
   }
 }

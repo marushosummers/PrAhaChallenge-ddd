@@ -64,10 +64,15 @@ export class Team {
     // NOTE: 参加できるペアがなければ再編成
     if (!pair.isJoinable()) {
       this.dividePair(pair)
-      this.addMember(member)
+      return this.addMember(member)
     }
 
     pair.addMember(member)
+
+    //TODO: Team/Pairの人数validation
+    //this.validatePairMemberCount()
+    this.validateTeamMemberCount()
+
     return pair
   }
 
@@ -76,6 +81,7 @@ export class Team {
   }
 
   public deletePair = (pairId: string): void => {
+    // NOTE: testがしにくくなってる？
     this.pairs = this.pairs.filter(pair => pair.id !== pairId)
     this.validateTeamMemberCount()
   }
