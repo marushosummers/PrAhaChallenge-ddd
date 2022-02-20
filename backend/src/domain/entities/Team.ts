@@ -77,7 +77,6 @@ export class Team {
 
   public addPair = (pair: Pair): void => {
     this.pairs.push(pair)
-    this.validateTeamMemberCount()
   }
 
   public deletePair = (pairId: string): void => {
