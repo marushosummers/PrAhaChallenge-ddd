@@ -4,8 +4,7 @@ export class Team {
   public readonly id: string
   private name: number
   private pairs: Pair[]
-  private MIN_MEMBER = 2
-  private MAX_MEMBER = 3
+  private MIN_MEMBER = 3
 
   public constructor(props: { id: string, name: number, pairs: Pair[] }) {
     const { id, name, pairs } = props
@@ -54,7 +53,7 @@ export class Team {
   private validateTeamMemberCount(): void {
     const memberCount = this.getMemberCount()
     if (!(memberCount >= this.MIN_MEMBER)) {
-      throw new Error("Team should have at least 2 members.");
+      throw new Error("Team should have at least 3 members.");
     }
   };
 
@@ -95,7 +94,7 @@ export class Team {
   }
 
   public getJoinablePair(): Pair | undefined {
-    return this.pairs.find((pair) => pair.memberIds.length < this.MAX_MEMBER - 1)
+    return this.pairs.find((pair) => pair.isJoinable())
   }
 
   public restructPair(): void {
@@ -108,6 +107,7 @@ export class Pair {
   public readonly id: string
   public readonly name: string
   public readonly memberIds: string[]
+  private MAX_MEMBER = 3
 
   public constructor(props: { id: string, name: string, memberIds: string[] }) {
     const { id, name, memberIds } = props
@@ -135,5 +135,9 @@ export class Pair {
 
   public addMember(member: Member): void {
     this.memberIds.push(member.id)
+  }
+
+  public isJoinable = (): boolean => {
+    return this.memberIds.length < this.MAX_MEMBER
   }
 }
