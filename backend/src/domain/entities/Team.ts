@@ -1,10 +1,11 @@
+import { PairFactory } from "../factory/team"
 import { Member } from "./Member"
 
 export class Team {
   public readonly id: string
   private name: number
   private pairs: Pair[]
-  private MIN_MEMBER = 3
+  public readonly MIN_MEMBER = 3
 
   public constructor(props: { id: string, name: number, pairs: Pair[] }) {
     const { id, name, pairs } = props
@@ -57,22 +58,17 @@ export class Team {
     }
   };
 
-  public addMember(member: Member): void {
-    // NOTE: 加入させるペアを調べる
-    let pair = this.getJoinablePair()
+  public addMember(member: Member): Pair {
+    const pair = this.getMinMemberPair()
 
-    // NOTE: なければペアを再編成
-    if (!pair) {
-      this.restructPair()
-      pair = this.getJoinablePair()
-
-      if (!pair) {
-        throw Error
-      }
+    // NOTE: 参加できるペアがなければ再編成
+    if (!pair.isJoinable()) {
+      this.dividePair(pair)
+      this.addMember(member)
     }
 
-    // TODO: ペアに加入
     pair.addMember(member)
+    return pair
   }
 
   public addPair = (pair: Pair): void => {
@@ -89,15 +85,26 @@ export class Team {
   }
 
   public getMemberCount = (): number => {
-    return this.pairs.reduce((prev, current) => prev + current.memberIds.length, 0);
+    return this.pairs.reduce((prev, current) => prev + current.getAllProperties().memberIds.length, 0);
+  }
+
+  public getMinMemberPair(): Pair {
+    return this.pairs.reduce((prev, current) => ((prev.getMemberCount() < current.getMemberCount()) ? prev : current));
   }
 
   public getJoinablePair(): Pair | undefined {
     return this.pairs.find((pair) => pair.isJoinable())
   }
 
-  public restructPair(): void {
-    // TODO: チームにあるペアが全てmax人だった場合、最少人数の新しいペアを1組作る
+  public dividePair(pair: Pair): Pair[] {
+    const moveMemberIds: string[] = pair.getAllProperties().memberIds.splice(pair.MIN_MEMBER);
+
+    moveMemberIds.forEach((memberId) => { pair.deleteMember(memberId) })
+
+    const newPair = PairFactory.create({ team: this, memberIds: moveMemberIds })
+    this.addPair(newPair)
+
+    return [pair, newPair]
   }
 
 }
@@ -105,8 +112,9 @@ export class Team {
 export class Pair {
   public readonly id: string
   public readonly name: string
-  public readonly memberIds: string[]
-  private MAX_MEMBER = 3
+  private memberIds: string[]
+  public readonly MIN_MEMBER = 2
+  public readonly MAX_MEMBER = 3
 
   public constructor(props: { id: string, name: string, memberIds: string[] }) {
     const { id, name, memberIds } = props
@@ -122,7 +130,7 @@ export class Pair {
     return {
       id: this.id,
       name: this.name,
-      members: this.memberIds
+      memberIds: this.memberIds
     }
   }
 
@@ -134,6 +142,14 @@ export class Pair {
 
   public addMember(member: Member): void {
     this.memberIds.push(member.id)
+  }
+
+  public deleteMember(memberId: string): void {
+    this.memberIds = this.memberIds.filter(id => id !== memberId)
+  }
+
+  public getMemberCount(): number {
+    return this.memberIds.length;
   }
 
   public isJoinable = (): boolean => {

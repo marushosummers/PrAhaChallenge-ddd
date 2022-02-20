@@ -3,6 +3,8 @@ import { IMemberRepository } from './repository-interface/member-repository'
 import { MemberFactory } from 'src/domain/factory/member'
 import { ActivityStatus, Member } from 'src/domain/entities/Member'
 import { MemberService } from 'src/domain/services/member'
+import { TeamService } from 'src/domain/services/team'
+import { ITeamRepository } from './repository-interface/team-repository'
 
 interface MemberPrams {
   name: string,
@@ -12,10 +14,12 @@ interface MemberPrams {
 export class CreateMemberUseCase {
   private readonly taskRepo: ITaskRepository
   private readonly memberRepo: IMemberRepository
+  private readonly teamRepo: ITeamRepository
 
-  public constructor(memberRepo: IMemberRepository, taskRepo: ITaskRepository) {
+  public constructor(memberRepo: IMemberRepository, taskRepo: ITaskRepository, teamRepo: ITeamRepository) {
     this.memberRepo = memberRepo
     this.taskRepo = taskRepo
+    this.teamRepo = teamRepo
   }
 
   public async do(params: MemberPrams): Promise<Member> {
@@ -30,12 +34,13 @@ export class CreateMemberUseCase {
     const member = await MemberFactory.create({ name: name, email: email, taskRepo: this.taskRepo} )
     const result = await this.memberRepo.save(member) as Member
 
-    // TODO: Team, Paitへのアサイン
-    // const teamService = new TeamService(this.teamQS, this.teamRepo)
-    // const team = await teamService.getMinMemberTeam()
-    // team.addMember(member)
+    // Team, Pairへのアサイン
+    const teamService = new TeamService(this.teamRepo)
+    const team = await teamService.getMinMemberTeam()
+    team.addMember(member)
 
     await this.memberRepo.save(member)
+    await this.teamRepo.save(team)
     return result
   }
 }

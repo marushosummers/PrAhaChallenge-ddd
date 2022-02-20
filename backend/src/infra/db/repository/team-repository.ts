@@ -138,8 +138,10 @@ export class TeamRepository implements ITeamRepository {
       },
     })
 
+    console.log(saveTeam)
+
     const savePairs = await Promise.all(pairs.map(async (pair) => {
-      await this.prismaClient.pair.update({
+      const savePair = await this.prismaClient.pair.update({
         where: {
           id: pair.id,
         },
@@ -148,8 +150,10 @@ export class TeamRepository implements ITeamRepository {
           teamId: id
         },
       })
-      await Promise.all(pair.memberIds.map(async (memberId) => {
-        this.prismaClient.member.update({
+      console.log(savePair)
+
+      const savedMembers = await Promise.all(pair.getAllProperties().memberIds.map(async (memberId) => {
+        const saveMember = await this.prismaClient.member.update({
           where: {
             id: memberId,
           },
@@ -157,7 +161,10 @@ export class TeamRepository implements ITeamRepository {
             pairId: pair.id
           },
         })
+        console.log(saveMember)
       }))
+      console.log(savedMembers)
     }))
+    console.log(savePairs)
   }
 }
