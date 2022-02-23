@@ -25,6 +25,20 @@ export class TeamService {
     return  teams.reduce((prev, current) => ((prev.getMemberCount() < current.getMemberCount()) ? prev : current));
   };
 
+  public breakup = async (team: Team): Promise<Team> => {
+    const destTeam = await this.getMinMemberTeam();
+
+    if (!(destTeam)) {
+      throw new Error("Not Found.");
+    }
+
+    const newTeam = team.joinOtherTeam(destTeam);
+
+    await this.teamRepository.delete(team);
+    await this.teamRepository.save(newTeam);
+    return newTeam
+  };
+
   public movePair = async (pairId: string, newTeamId: string): Promise<void> => {
     const oldTeam = await this.teamRepository.getByPairId(pairId);
     const newTeam = await this.teamRepository.getById(newTeamId);
