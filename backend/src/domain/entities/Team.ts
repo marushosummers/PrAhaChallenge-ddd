@@ -58,6 +58,12 @@ export class Team {
     }
   };
 
+  private validatePairMemberCount(): void {
+    this.pairs.forEach(pair => {
+      pair.validateMemberCount()
+    })
+  };
+
   public addMember(member: Member): Pair {
     const pair = this.getMinMemberPair()
 
@@ -69,8 +75,8 @@ export class Team {
 
     pair.addMember(member)
 
-    //TODO: Team/Pairの人数validation
-    //this.validatePairMemberCount()
+    //Team/Pairの人数validation
+    this.validatePairMemberCount()
     this.validateTeamMemberCount()
 
     return pair
@@ -143,6 +149,13 @@ export class Pair {
   private validateName(name: string): void {
     if (!new RegExp("^[a-z]$").test(name)) {
       throw new Error("Team name should be a lowercase alphabet.");
+    }
+  }
+
+  public validateMemberCount(): void {
+    const memberCount = this.getMemberCount()
+    if (memberCount < this.MIN_MEMBER || this.MAX_MEMBER < memberCount) {
+      throw new Error(`Team should have between ${this.MIN_MEMBER} and ${this.MAX_MEMBER} members.`);
     }
   }
 
