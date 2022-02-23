@@ -37,7 +37,7 @@ export class CreateMemberUseCase {
     // Team, Pairへのアサイン
     const teamService = new TeamService(this.teamRepo)
     const team = await teamService.getMinMemberTeam()
-    team.addMember(member)
+    team.addMember(member.id)
 
     await this.memberRepo.save(member)
     await this.teamRepo.save(team)
