@@ -10,7 +10,7 @@ export class MemberFactory {
 
     if (!tasks) { throw Error('taskIds is null') }
 
-    const memberTasks = tasks.map((task) => MemberTaskFactory.create({ taskId: task.getAllProperties().id }))
+    const memberTasks = tasks.map((task) => MemberTaskFactory.create({ taskId: task.id }))
     // Memberは在籍中で生成される
     return new Member({ id: createRandomIdString(), name: name, email: email, activityStatus: 'ONGOING', memberTasks: memberTasks });
   }

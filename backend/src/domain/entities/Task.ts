@@ -1,5 +1,5 @@
 export class Task {
-  private id: string
+  public readonly id: string
   private content: string
 
   public constructor(props: { id: string, content: string }) {
