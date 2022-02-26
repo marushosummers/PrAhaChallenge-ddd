@@ -64,6 +64,10 @@ export class Team {
     })
   };
 
+  public isMemberDeletable(): boolean {
+    return this.getMemberCount() > this.MIN_MEMBER
+  }
+
   public addMember(memberId: string): Pair {
     const pair = this.getMinMemberPair()
 
@@ -89,12 +93,15 @@ export class Team {
       throw new Error("Not Found.")
     }
 
-    // Pairの再構成ロジック
+    // Pairが成立しない場合は再構成を行う
     if (pair.getMemberCount() === pair.MIN_MEMBER) {
       const moveMemberIds = pair.getAllProperties().memberIds.filter(id => id !== memberId)
-      this.deletePair(pair)
-      moveMemberIds.forEach((memberId) => { this.addMember(memberId) })
+      this.deletePair(pair.id)
+
+      const newPair = this.getMinMemberPair()
+      moveMemberIds.forEach((memberId) => { newPair.addMember(memberId) })
     }
+
     pair.deleteMember(memberId)
 
     //Team/Pairの人数validation

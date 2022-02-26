@@ -20,10 +20,14 @@ export class DeleteMemberUseCase {
     if (!member) {
       throw new Error("Not Found.");
     } else {
-      // TODO: Pairから抜ける処理を入れる
-      const team: Team = await this.teamRepo.getByMemberId(member.id)
+      const team = await this.teamRepo.getByMemberId(member.id)
 
-      if (team.isMemberDeletable(member.id)) {
+      if (!team) {
+        throw new Error("Not Found.");
+      }
+
+      // Team, Pairから抜けられるかチェックする
+      if (team.isMemberDeletable()) {
         team.deleteMember(member.id)
         await this.teamRepo.save(team);
       } else {
@@ -33,7 +37,7 @@ export class DeleteMemberUseCase {
         await this.teamRepo.save(newTeam);
       }
 
-      await this.memberRepo.deleteById(member.getAllProperties().id);
+      await this.memberRepo.deleteById(member.id);
       return member
     }
   }
