@@ -50,13 +50,38 @@ export class TeamRepository implements ITeamRepository {
       return null
     }
 
-    const TeamEntity = new Team({
+    return new Team({
       id: team.id,
       name: team.name,
       pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
     })
+  }
 
-    return TeamEntity
+  public async getByName(name: number): Promise<Team | null> {
+    const team = await this.prismaClient.team.findUnique({
+      include: {
+        pairs: {
+          select: {
+            id: true,
+            name: true,
+            members: true
+          },
+        },
+      },
+      where: {
+        name: name
+      }
+    })
+
+    if (!team) {
+      return null
+    }
+
+    return new Team({
+      id: team.id,
+      name: team.name,
+      pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
+    })
   }
 
   public async getByPairId(pairId: string): Promise<Team | null> {
@@ -101,10 +126,52 @@ export class TeamRepository implements ITeamRepository {
     return TeamEntity
   }
 
+  public async getByMemberId(memberId: string): Promise<Team | null> {
+    const member = await this.prismaClient.member.findUnique({
+      include: {
+        pair: true,
+      },
+      where: {
+        id: memberId,
+      }
+    })
+
+    if (!member || !member.pair) {
+      return null
+    }
+
+    const team = await this.prismaClient.team.findUnique({
+      include: {
+        pairs: {
+          select: {
+            id: true,
+            name: true,
+            members: true
+          },
+        },
+      },
+      where: {
+        id: member.pair.teamId,
+      }
+    })
+
+    if (!team) {
+      return null
+    }
+
+    const TeamEntity = new Team({
+      id: team.id,
+      name: team.name,
+      pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
+    })
+
+    return TeamEntity
+  }
+
   public async save(team: Team): Promise<void> {
     const { id, name, pairs } = team.getAllProperties()
 
-    const saveTeam = await this.prismaClient.team.update({
+    const savedTeam = await this.prismaClient.team.update({
       where: {
         id: id,
       },
@@ -113,18 +180,28 @@ export class TeamRepository implements ITeamRepository {
       },
     })
 
-    const savePairs = await Promise.all(pairs.map(async (pair) => {
-      await this.prismaClient.pair.update({
+    console.log(savedTeam)
+
+    const savedPairs = await Promise.all(pairs.map(async (pair) => {
+      const savedPair = await this.prismaClient.pair.upsert({
         where: {
           id: pair.id,
         },
-        data: {
+        update: {
           name: pair.name,
           teamId: id
         },
+        create: {
+          id: pair.id,
+          name: pair.name,
+          teamId: id
+        }
       })
-      await Promise.all(pair.memberIds.map(async (memberId) => {
-        this.prismaClient.member.update({
+      console.log("savePair", savedPair)
+
+      // TODO: Memberの所属は別テーブルで持った方が綺麗
+      const savedMembers = await Promise.all(pair.getAllProperties().memberIds.map(async (memberId) => {
+        const savedMember = await this.prismaClient.member.update({
           where: {
             id: memberId,
           },
@@ -132,7 +209,15 @@ export class TeamRepository implements ITeamRepository {
             pairId: pair.id
           },
         })
+        return savedMember
       }))
+      return savedMembers
     }))
+  }
+
+  public async deleteById(id: string): Promise<void> {
+    const deletePair = this.prismaClient.pair.deleteMany({ where: { teamId: id } })
+    const deleteTeam = this.prismaClient.team.delete({ where: { id: id } })
+    await this.prismaClient.$transaction([deletePair, deleteTeam])
   }
 }

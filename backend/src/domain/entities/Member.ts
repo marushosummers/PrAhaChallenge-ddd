@@ -51,7 +51,7 @@ export class Member {
   }
 
   public updateTaskProgressStatus(memberTaskId: string, taskProgressStatus: TaskProgressStatus): void{
-    const memberTask = this.memberTasks.find(memberTask => memberTask.getAllProperties().id == memberTaskId)
+    const memberTask = this.memberTasks.find(memberTask => memberTask.id == memberTaskId)
     if (memberTask) {
       memberTask.setProgressStatus(taskProgressStatus)
     } else {
@@ -79,7 +79,7 @@ export class Member {
 }
 
 export class MemberTask {
-  private id: string;
+  public readonly id: string;
   private taskId: string;
   private progressStatus: TaskProgressStatus;
 

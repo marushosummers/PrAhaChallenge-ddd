@@ -8,6 +8,7 @@ import { MemberRepository } from 'src/infra/db/repository/member-repository'
 import { mocked } from 'ts-jest/utils'
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'
 import { CreateMemberUseCase } from '../create-member-usecase'
+import { TeamRepository } from 'src/infra/db/repository/team-repository'
 
 jest.mock('@prisma/client')
 jest.mock('src/infra/db/repository/task-repository.ts')
@@ -17,6 +18,7 @@ describe('do', () => {
   describe('OK', () => {
     let mockTaskRepository: MockedObjectDeep<TaskRepository>
     let mockMemberRepository: MockedObjectDeep<MemberRepository>
+    let mockTeamRepository: MockedObjectDeep<TeamRepository>
     let mockTask: MockedObjectDeep<Task>
     let mockMember: MockedObjectDeep<Member>
     beforeAll(() => {
@@ -41,7 +43,7 @@ describe('do', () => {
       mockMemberRepository.save.mockResolvedValueOnce([mockMember])
       mockMemberRepository.getAll.mockResolvedValueOnce([mockMember])
 
-      const usecase = new CreateMemberUseCase(mockMemberRepository, mockTaskRepository)
+      const usecase = new CreateMemberUseCase(mockMemberRepository, mockTaskRepository, mockTeamRepository)
       return expect(usecase.do({ name: name, email: email })).resolves.toStrictEqual([expectedReponse])
     })
   })

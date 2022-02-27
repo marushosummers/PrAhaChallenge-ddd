@@ -14,6 +14,7 @@ import { UpdateMemberTaskUseCase } from 'src/app/update-member-task-usecase'
 import { DeleteMemberUseCase } from 'src/app/delete-member-usecase'
 import { PutMemberRequest } from './request/put-member-request'
 import { UpdateMemberUseCase } from 'src/app/update-member-usecase'
+import { TeamRepository } from 'src/infra/db/repository/team-repository'
 
 @Controller({
   path: '/member',
@@ -37,7 +38,8 @@ export class MemberController {
     const prisma = new PrismaClient()
     const memberRepo = new MemberRepository(prisma)
     const taskRepo = new TaskRepository(prisma)
-    const usecase = new CreateMemberUseCase(memberRepo, taskRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new CreateMemberUseCase(memberRepo, taskRepo, teamRepo)
     const member = await usecase.do({ name: postMemberDTO.name, email: postMemberDTO.email})
     return member
   }
@@ -118,7 +120,8 @@ export class MemberController {
   async deleteMember(@Param("id") id: string): Promise<Member> {
     const prisma = new PrismaClient()
     const memberRepo = new MemberRepository(prisma)
-    const usecase = new DeleteMemberUseCase(memberRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new DeleteMemberUseCase(memberRepo, teamRepo)
     const member = await usecase.do({ id: id })
     return member
   }

@@ -20,7 +20,7 @@ export class PatchTeamUseCase {
       throw new Error("Not Found.")
     }
 
-    const teamService = new TeamService(this.teamQS, this.teamRepo)
+    const teamService = new TeamService(this.teamRepo)
     if (await teamService.isSameNameExist(name)) {
       throw new Error("There is data with the same name.")
     }

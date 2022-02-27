@@ -18,8 +18,8 @@ export class DeleteTaskUseCase {
     if (!task) {
       throw new Error();
     } else {
-      await this.memberRepo.deleteMemberTasksByTaskId(task.getAllProperties().id)
-      await this.taskRepo.deleteById(task.getAllProperties().id);
+      await this.memberRepo.deleteMemberTasksByTaskId(task.id)
+      await this.taskRepo.deleteById(task.id);
       return task
     }
   }
