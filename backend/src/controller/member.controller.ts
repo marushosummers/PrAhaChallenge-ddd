@@ -120,7 +120,8 @@ export class MemberController {
   async deleteMember(@Param("id") id: string): Promise<Member> {
     const prisma = new PrismaClient()
     const memberRepo = new MemberRepository(prisma)
-    const usecase = new DeleteMemberUseCase(memberRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new DeleteMemberUseCase(memberRepo, teamRepo)
     const member = await usecase.do({ id: id })
     return member
   }

@@ -34,8 +34,8 @@ export class TeamService {
 
     const newTeam = team.joinOtherTeam(destTeam);
 
-    await this.teamRepository.delete(team);
     await this.teamRepository.save(newTeam);
+    await this.teamRepository.deleteById(team.id);
     return newTeam
   };
 

@@ -8,4 +8,5 @@ export interface ITeamRepository {
   getByMemberId(memberId: string): Promise<Team | null>
 
   save(team: Team): Promise<void>
+  deleteById(id: string): Promise<void>
 }

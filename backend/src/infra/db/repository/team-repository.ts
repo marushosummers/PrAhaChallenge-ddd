@@ -214,4 +214,10 @@ export class TeamRepository implements ITeamRepository {
       return savedMembers
     }))
   }
+
+  public async deleteById(id: string): Promise<void> {
+    const deletePair = this.prismaClient.pair.deleteMany({ where: { teamId: id } })
+    const deleteTeam = this.prismaClient.team.delete({ where: { id: id } })
+    await this.prismaClient.$transaction([deletePair, deleteTeam])
+  }
 }
