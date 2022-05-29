@@ -73,3 +73,36 @@ cd .docker
 docker compose up -d
 docker compose exec backend /bin/bash
 ```
+
+## Installation
+
+```bash
+$ yarn
+```
+
+## Running the app
+
+```bash
+$ yarn dev
+
+# production mode
+$ yarn start
+```
+
+## Running prisma studio
+
+```bash
+$ yarn studio:dev
+```
+
+
+## Test
+
+```bash
+# unit tests
+$ yarn test:unit
+
+# test all
+$ yarn test
+```
+
