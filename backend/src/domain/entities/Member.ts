@@ -112,5 +112,5 @@ export class MemberTask {
 }
 
 export type ActivityStatus = 'ONGOING' | 'RECESS' | 'LEFT'; // 在籍中 | 休会中 | 退会済
-export type TaskProgressStatus = 'NOTYET' | 'RERUESTREVIEW' | 'DONE'; // 未着手 | レビュー待ち | 完了
+export type TaskProgressStatus = 'NOTYET' | 'REQUESTREVIEW' | 'DONE'; // 未着手 | レビュー待ち | 完了
 

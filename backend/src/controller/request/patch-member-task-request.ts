@@ -6,6 +6,6 @@ import { TaskProgressStatus } from 'src/domain/entities/Member'
 
 export class PatchMemberTaskRequest {
   @ApiProperty()
-  @IsEnum({ NOTEYET: 'NOTYET', RERUESTREVIEW: 'RERUESTREVIEW', DONE: 'DONE' }) // TODO: 型を使いたい
+  @IsEnum({ NOTYET: 'NOTYET', REQUESTREVIEW: 'REQUESTREVIEW', DONE: 'DONE' }) // TODO: 型を使いたい
   readonly taskProgressStatus!: TaskProgressStatus
 }
