@@ -40,8 +40,29 @@ export class MemberController {
     const taskRepo = new TaskRepository(prisma)
     const teamRepo = new TeamRepository(prisma)
     const usecase = new CreateMemberUseCase(memberRepo, taskRepo, teamRepo)
-    const member = await usecase.do({ name: postMemberDTO.name, email: postMemberDTO.email})
-    return member
+
+    try {
+      const member = await usecase.do({ name: postMemberDTO.name, email: postMemberDTO.email})
+      return member
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: e.message,
+          },
+          500,
+        );
+      } else {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: "Internal server error",
+          },
+          500,
+        );
+      }
+    }
   }
 
   @Put('/:id')
