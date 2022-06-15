@@ -65,8 +65,6 @@ export class MemberQS implements IMemberQS {
       }
     })
 
-    console.log(memberTasks)
-
     return member ?
       new MemberDetailDTO({
         id: member.id,

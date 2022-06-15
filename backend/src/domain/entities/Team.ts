@@ -141,11 +141,12 @@ export class Team {
   }
 
   public dividePair(pair: Pair): Pair[] {
-    const moveMemberIds: string[] = pair.getAllProperties().memberIds.splice(pair.MIN_MEMBER);
+    const moveMemberIds: string[] = pair.getAllProperties().memberIds.splice(pair.MIN_MEMBER - 1);
 
     moveMemberIds.forEach((memberId) => { pair.deleteMember(memberId) })
 
     const newPair = PairFactory.create({ team: this, memberIds: moveMemberIds })
+
     this.addPair(newPair)
 
     return [pair, newPair]

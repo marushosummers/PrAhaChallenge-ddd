@@ -180,8 +180,6 @@ export class TeamRepository implements ITeamRepository {
       },
     })
 
-    console.log(savedTeam)
-
     const savedPairs = await Promise.all(pairs.map(async (pair) => {
       const savedPair = await this.prismaClient.pair.upsert({
         where: {
@@ -197,7 +195,6 @@ export class TeamRepository implements ITeamRepository {
           teamId: id
         }
       })
-      console.log("savePair", savedPair)
 
       // TODO: Memberの所属は別テーブルで持った方が綺麗
       const savedMembers = await Promise.all(pair.getAllProperties().memberIds.map(async (memberId) => {
