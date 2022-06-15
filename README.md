@@ -32,7 +32,7 @@
   - [x] 新規追加
     - [x] 作成時に、参加者全員にNotyetのステータスで課題が作成される
     ```
-      curl -X POST -H "Content-Type: application/json" -d '{"content":"データベースを触ってみよ う"}' localhost:3000/task
+      curl -X POST -H "Content-Type: application/json" -d '{"content":"データベースを触ってみよう"}' localhost:3000/task
 
       {"id":"b9758669-96e0-411c-9e21-630543f39d57","content":"データベースを触ってみよう"}
     ```
