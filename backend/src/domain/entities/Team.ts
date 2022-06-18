@@ -1,5 +1,5 @@
-import { PairFactory } from "../factory/team"
-import { Member } from "./Member"
+import { PairFactory } from '../factory/team'
+import { Member } from './Member'
 
 export class Team {
   public readonly id: string
@@ -7,7 +7,7 @@ export class Team {
   private pairs: Pair[]
   public readonly MIN_MEMBER = 3
 
-  public constructor(props: { id: string, name: number, pairs: Pair[] }) {
+  public constructor(props: { id: string; name: number; pairs: Pair[] }) {
     const { id, name, pairs } = props
     this.validateName(name)
 
@@ -20,7 +20,7 @@ export class Team {
     return {
       id: this.id,
       name: this.name,
-      pairs: this.pairs
+      pairs: this.pairs,
     }
   }
 
@@ -33,9 +33,9 @@ export class Team {
   }
 
   public getPair(pairId: string) {
-    const pair = this.pairs.find(pair => pair.id === pairId)
+    const pair = this.pairs.find((pair) => pair.id === pairId)
     if (!pair) {
-      throw new Error("Not Found.")
+      throw new Error('Not Found.')
     }
     return pair
   }
@@ -47,22 +47,22 @@ export class Team {
 
   private validateName(name: number): void {
     if (!(Number.isInteger(name) && 0 <= name && name <= 999)) {
-      throw new Error("Team name should be an integer of 3 characters or less.");
+      throw new Error('Team name should be an integer of 3 characters or less.')
     }
-  };
+  }
 
   private validateTeamMemberCount(): void {
     const memberCount = this.getMemberCount()
     if (!(memberCount >= this.MIN_MEMBER)) {
-      throw new Error("Team should have at least 3 members.");
+      throw new Error('Team should have at least 3 members.')
     }
-  };
+  }
 
   private validatePairMemberCount(): void {
-    this.pairs.forEach(pair => {
+    this.pairs.forEach((pair) => {
       pair.validateMemberCount()
     })
-  };
+  }
 
   public isMemberDeletable(): boolean {
     return this.getMemberCount() > this.MIN_MEMBER
@@ -90,16 +90,20 @@ export class Team {
   public deleteMember(memberId: string): void {
     const pair = this.getPairByMemberId(memberId)
     if (!pair) {
-      throw new Error("Not Found.")
+      throw new Error('Not Found.')
     }
 
     // Pairが成立しない場合は再構成を行う
     if (pair.getMemberCount() === pair.MIN_MEMBER) {
-      const moveMemberIds = pair.getAllProperties().memberIds.filter(id => id !== memberId)
+      const moveMemberIds = pair
+        .getAllProperties()
+        .memberIds.filter((id) => id !== memberId)
       this.deletePair(pair.id)
 
       const newPair = this.getMinMemberPair()
-      moveMemberIds.forEach((memberId) => { newPair.addMember(memberId) })
+      moveMemberIds.forEach((memberId) => {
+        newPair.addMember(memberId)
+      })
     }
 
     pair.deleteMember(memberId)
@@ -116,20 +120,25 @@ export class Team {
 
   public deletePair = (pairId: string): void => {
     // NOTE: testがしにくくなってる？
-    this.pairs = this.pairs.filter(pair => pair.id !== pairId)
+    this.pairs = this.pairs.filter((pair) => pair.id !== pairId)
     this.validateTeamMemberCount()
   }
 
   public getPairCount = (): number => {
-    return this.pairs.length;
+    return this.pairs.length
   }
 
   public getMemberCount = (): number => {
-    return this.pairs.reduce((prev, current) => prev + current.getAllProperties().memberIds.length, 0);
+    return this.pairs.reduce(
+      (prev, current) => prev + current.getAllProperties().memberIds.length,
+      0,
+    )
   }
 
   public getMinMemberPair(): Pair {
-    return this.pairs.reduce((prev, current) => ((prev.getMemberCount() < current.getMemberCount()) ? prev : current));
+    return this.pairs.reduce((prev, current) =>
+      prev.getMemberCount() < current.getMemberCount() ? prev : current,
+    )
   }
 
   public getPairByMemberId(memberId: string): Pair | undefined {
@@ -141,9 +150,13 @@ export class Team {
   }
 
   public dividePair(pair: Pair): Pair[] {
-    const moveMemberIds: string[] = pair.getAllProperties().memberIds.splice(pair.MIN_MEMBER - 1);
+    const moveMemberIds: string[] = pair
+      .getAllProperties()
+      .memberIds.splice(pair.MIN_MEMBER - 1)
 
-    moveMemberIds.forEach((memberId) => { pair.deleteMember(memberId) })
+    moveMemberIds.forEach((memberId) => {
+      pair.deleteMember(memberId)
+    })
 
     const newPair = PairFactory.create({ team: this, memberIds: moveMemberIds })
 
@@ -153,13 +166,18 @@ export class Team {
   }
 
   public joinOtherTeam = (destinationTeam: Team): Team => {
-    const pairs = this.getAllProperties().pairs;
-    const newPairs: Pair[] = pairs.map(pair => PairFactory.create({ team: destinationTeam, memberIds: pair.getAllProperties().memberIds }))
+    const pairs = this.getAllProperties().pairs
+    const newPairs: Pair[] = pairs.map((pair) =>
+      PairFactory.create({
+        team: destinationTeam,
+        memberIds: pair.getAllProperties().memberIds,
+      }),
+    )
 
-    newPairs.forEach(pair => destinationTeam.addPair(pair));
+    newPairs.forEach((pair) => destinationTeam.addPair(pair))
 
     return destinationTeam
-  };
+  }
 }
 
 export class Pair {
@@ -169,7 +187,7 @@ export class Pair {
   public readonly MIN_MEMBER = 2
   public readonly MAX_MEMBER = 3
 
-  public constructor(props: { id: string, name: string, memberIds: string[] }) {
+  public constructor(props: { id: string; name: string; memberIds: string[] }) {
     const { id, name, memberIds } = props
 
     this.validateName(name)
@@ -185,20 +203,22 @@ export class Pair {
     return {
       id: this.id,
       name: this.name,
-      memberIds: this.memberIds
+      memberIds: this.memberIds,
     }
   }
 
   private validateName(name: string): void {
-    if (!new RegExp("^[a-z]$").test(name)) {
-      throw new Error("Team name should be a lowercase alphabet.");
+    if (!new RegExp('^[a-z]$').test(name)) {
+      throw new Error('Team name should be a lowercase alphabet.')
     }
   }
 
   public validateMemberCount(): void {
     const memberCount = this.getMemberCount()
     if (memberCount < this.MIN_MEMBER || this.MAX_MEMBER < memberCount) {
-      throw new Error(`Team should have between ${this.MIN_MEMBER} and ${this.MAX_MEMBER} members.`);
+      throw new Error(
+        `Team should have between ${this.MIN_MEMBER} and ${this.MAX_MEMBER} members.`,
+      )
     }
   }
 
@@ -207,11 +227,11 @@ export class Pair {
   }
 
   public deleteMember(memberId: string): void {
-    this.memberIds = this.memberIds.filter(id => id !== memberId)
+    this.memberIds = this.memberIds.filter((id) => id !== memberId)
   }
 
   public getMemberCount(): number {
-    return this.memberIds.length;
+    return this.memberIds.length
   }
 
   public isJoinable = (): boolean => {

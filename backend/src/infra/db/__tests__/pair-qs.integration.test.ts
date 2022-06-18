@@ -17,14 +17,18 @@ describe('pair-qs.integration.ts', () => {
       await prisma.pair.deleteMany({})
     })
     it('[正常系] Pairを取得できる', async () => {
-      const teamId = "testId"
+      const teamId = 'testId'
       const PairExpected = new PairDTO({
         id: createRandomIdString(),
-        name: "a",
+        name: 'a',
         members: [],
       })
       await seedTeam({ id: teamId })
-      await seedPair({ id: PairExpected.id, name: PairExpected.name, teamId: teamId})
+      await seedPair({
+        id: PairExpected.id,
+        name: PairExpected.name,
+        teamId: teamId,
+      })
 
       const pairs = await pairQS.getAll()
       expect(pairs).toHaveLength(1)

@@ -27,14 +27,14 @@ describe('prism全般に関するテスト', () => {
       try {
         const task1 = prisma.team.create({
           data: {
-          id: '1',
-          name: 101,
+            id: '1',
+            name: 101,
           },
         })
         const task2 = prisma.team.create({
           data: {
-          id: '2',
-          name: 101,
+            id: '2',
+            name: 101,
           },
         })
         await prisma.$transaction([task1, task2])
