@@ -44,7 +44,7 @@ model MemberTask {
   memberId    String
   task      Task   @relation(fields: [taskId], references: [id])
   taskId    String
-  progressStatus String @default("InReview")
+  progressStatus String @default("NOTYET")
 }
 
 enum ActivityStatus {

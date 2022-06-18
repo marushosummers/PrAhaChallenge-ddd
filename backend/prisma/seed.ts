@@ -1,51 +1,93 @@
 import { PrismaClient } from '@prisma/client';
-import * as dotenv from 'dotenv';
-
 import * as faker from 'faker';
+import { fake } from 'faker/locale/zh_TW';
 
 
 const prisma  = new PrismaClient();
 
 const range = (n: number): number[] => (Array(n).fill(null).map((v, k) => { return k + 1 }))
 
-const fakeTeams = range(3).map(n => (
+const genFakeTeam = (teamName: number, fakeTasks: any[]) => (
   {
     id: faker.datatype.uuid(),
-    name: n,
-    pair: {
-      id: faker.datatype.uuid(),
-      name: 'a',
+    name: teamName,
+    pairs: {
+      create: [
+        {
+          id: faker.datatype.uuid(),
+          name: 'a',
+          members: {
+            create: range(3).map(n => (
+              {
+                id: faker.datatype.uuid(),
+                name: faker.name.firstName(),
+                email: faker.internet.email(),
+                memberTasks: {
+                  create: fakeTasks.map(task => (
+                    {
+                      id: faker.datatype.uuid(),
+                      task: {
+                        connect: {
+                          id: task.id,
+                        }
+                      }
+                    })
+                  )
+                }
+              }
+            ))
+            }
+        },
+        {
+          id: faker.datatype.uuid(),
+          name: 'b',
+          members: {
+            create: range(2).map(n => (
+              {
+                id: faker.datatype.uuid(),
+                name: faker.name.firstName(),
+                email: faker.internet.email(),
+                memberTasks: {
+                  create: fakeTasks.map(task => (
+                    {
+                      id: faker.datatype.uuid(),
+                      task: {
+                        connect: {
+                          id: task.id,
+                        }
+                      }
+                    })
+                  )
+                }
+              }
+            ))
+            }
+        },
+      ]
     }
   }
-));
-
-const fakeTasks = range(80).map(n => (
-  {
-    id: faker.datatype.uuid(),
-    content: `PrAhaTask${n}`,
-  }
-));
-
-const fakeMembers = range(9).map(n => (
-  {
-    id: faker.datatype.uuid(),
-    name: faker.name.firstName(),
-    email: faker.internet.email()
-  }
-));
+);
 
 async function main() {
-  const fakerRounds = 10;
-  dotenv.config();
-  console.log('Seeding...');
-  console.log(fakeTeams)
-  console.log(fakeMembers)
-  console.log(fakeTasks)
+  const fakeTasks = range(80).map(n => (
+    {
+      id: faker.datatype.uuid(),
+      content: `PrAhaTask${n}`,
+    }
+  ));
 
-  /// --------- Users ---------------
-  // for (let i = 0; i < fakerRounds; i++) {
-  // await prisma.user.create({ data: fakerUser() });
-  // }
+  // create Tasks
+  await prisma.task.createMany({
+    data: fakeTasks,
+  })
+
+  // create Teams, Pairs, Members
+  for (const teamName of range(3)) {
+    const fakeTeam = genFakeTeam(teamName, fakeTasks);
+    await prisma.team.create({
+      data: fakeTeam,
+    })
+  }
 };
 
 main()
