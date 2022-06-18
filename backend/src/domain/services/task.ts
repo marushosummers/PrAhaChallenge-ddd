@@ -1,15 +1,15 @@
-import { ITaskQS } from "src/app/query-service-interface/task-qs";
+import { ITaskQS } from 'src/app/query-service-interface/task-qs'
 
 export class TaskService {
-  private readonly taskQs: ITaskQS;
+  private readonly taskQs: ITaskQS
 
   public constructor(taskQs: ITaskQS) {
-    this.taskQs = taskQs;
+    this.taskQs = taskQs
   }
 
   public isExist = async (id: string): Promise<boolean> => {
-    const result = await this.taskQs.getById(id);
+    const result = await this.taskQs.getById(id)
 
-    return Boolean(result);
-  };
+    return Boolean(result)
+  }
 }

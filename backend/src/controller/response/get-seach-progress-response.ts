@@ -7,16 +7,25 @@ export class GetSearchProgressResponse {
 
   public constructor(params: { progresses: SearchProgressDTO[] }) {
     const { progresses } = params
-    this.progresses = progresses.map(({ id, taskId, taskContent, memberId, memberName, taskProgressStatus}) => {
-      const task = new Task({ id: taskId, content: taskContent })
-      const member = new Member({ id: memberId, name: memberName})
-      return new Progress({
-        id: id,
-        progressStatus: status,
-        task: task,
-        member: member
-      })
-    })
+    this.progresses = progresses.map(
+      ({
+        id,
+        taskId,
+        taskContent,
+        memberId,
+        memberName,
+        taskProgressStatus,
+      }) => {
+        const task = new Task({ id: taskId, content: taskContent })
+        const member = new Member({ id: memberId, name: memberName })
+        return new Progress({
+          id: id,
+          progressStatus: status,
+          task: task,
+          member: member,
+        })
+      },
+    )
   }
 }
 
@@ -27,10 +36,7 @@ class Task {
   @ApiProperty()
   content: string
 
-  public constructor(params: {
-    id: string
-    content: string
-  }) {
+  public constructor(params: { id: string; content: string }) {
     this.id = params.id
     this.content = params.content
   }
@@ -43,10 +49,7 @@ class Member {
   @ApiProperty()
   name: string
 
-  public constructor(params: {
-    id: string
-    name: string
-  }) {
+  public constructor(params: { id: string; name: string }) {
     this.id = params.id
     this.name = params.name
   }
@@ -66,9 +69,9 @@ class Progress {
   member: Member
 
   public constructor(params: {
-    id: string,
-    progressStatus: string,
-    task: Task,
+    id: string
+    progressStatus: string
+    task: Task
     member: Member
   }) {
     this.id = params.id
@@ -77,4 +80,3 @@ class Progress {
     this.member = params.member
   }
 }
-

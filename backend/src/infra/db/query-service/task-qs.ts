@@ -1,8 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import {
-  TaskDTO,
-  ITaskQS,
-} from 'src/app/query-service-interface/task-qs'
+import { TaskDTO, ITaskQS } from 'src/app/query-service-interface/task-qs'
 
 export class TaskQS implements ITaskQS {
   private prismaClient: PrismaClient
@@ -23,11 +20,11 @@ export class TaskQS implements ITaskQS {
   public async getById(id: string): Promise<TaskDTO | null> {
     const task = await this.prismaClient.task.findUnique({
       where: {
-        id: id
+        id: id,
       },
       include: {
-        memberTasks: true
-      }
+        memberTasks: true,
+      },
     })
     return task ? new TaskDTO({ ...task }) : null
   }

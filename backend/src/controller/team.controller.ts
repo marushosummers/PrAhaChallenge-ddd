@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Get, Patch, HttpException, HttpStatus} from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Param,
+  Get,
+  Patch,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetTeamResponse } from './response/get-team-response'
 import { GetTeamUseCase } from '../app/get-team-usecase'
@@ -11,7 +19,6 @@ import { Team } from '../domain/entities/Team'
 
 @Controller('team')
 export class TeamController {
-
   @Get()
   @ApiResponse({ status: 200, type: GetTeamResponse })
   async getTeam(): Promise<GetTeamResponse> {
@@ -40,7 +47,7 @@ export class TeamController {
         id: id,
         name: patchTeamDTO.name,
       })
-      return new Team({ id: "sample", name: 3, pairs: [] })
+      return new Team({ id: 'sample', name: 3, pairs: [] })
     } catch (e) {
       if (e instanceof Error) {
         throw new HttpException(
@@ -49,17 +56,16 @@ export class TeamController {
             error: e.message,
           },
           500,
-        );
+        )
       } else {
         throw new HttpException(
           {
             status: HttpStatus.INTERNAL_SERVER_ERROR,
-            error: "Internal server error",
+            error: 'Internal server error',
           },
           500,
-        );
+        )
       }
     }
   }
 }
-

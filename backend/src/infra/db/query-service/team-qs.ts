@@ -1,8 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import {
-  TeamDTO,
-  ITeamQS,
-} from 'src/app/query-service-interface/team-qs'
+import { TeamDTO, ITeamQS } from 'src/app/query-service-interface/team-qs'
 
 export class TeamQS implements ITeamQS {
   private prismaClient: PrismaClient
@@ -13,8 +10,8 @@ export class TeamQS implements ITeamQS {
   public async getAll(): Promise<TeamDTO[]> {
     const allTeams = await this.prismaClient.team.findMany({
       include: {
-        pairs: true
-      }
+        pairs: true,
+      },
     })
     return allTeams.map(
       (TeamDM) =>
@@ -27,24 +24,24 @@ export class TeamQS implements ITeamQS {
   public async getById(id: string): Promise<TeamDTO | null> {
     const Team = await this.prismaClient.team.findUnique({
       where: {
-        id: id
+        id: id,
       },
       include: {
-        pairs: true
-      }
+        pairs: true,
+      },
     })
-    return Team ? new TeamDTO({...Team}) : null
+    return Team ? new TeamDTO({ ...Team }) : null
   }
 
   public async getByName(name: number): Promise<TeamDTO | null> {
     const Team = await this.prismaClient.team.findUnique({
       where: {
-        name: name
+        name: name,
       },
       include: {
-        pairs: true
-      }
+        pairs: true,
+      },
     })
-    return Team ? new TeamDTO({...Team}) : null
+    return Team ? new TeamDTO({ ...Team }) : null
   }
 }

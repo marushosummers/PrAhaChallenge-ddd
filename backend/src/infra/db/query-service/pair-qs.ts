@@ -1,8 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import {
-  PairDTO,
-  IPairQS,
-} from 'src/app/query-service-interface/pair-qs'
+import { PairDTO, IPairQS } from 'src/app/query-service-interface/pair-qs'
 
 export class PairQS implements IPairQS {
   private prismaClient: PrismaClient
@@ -13,8 +10,8 @@ export class PairQS implements IPairQS {
   public async getAll(): Promise<PairDTO[]> {
     const allTeams = await this.prismaClient.pair.findMany({
       include: {
-        members: true
-      }
+        members: true,
+      },
     })
     return allTeams.map(
       (PairDM) =>

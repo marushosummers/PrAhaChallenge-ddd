@@ -15,10 +15,10 @@ export class MemberQS implements IMemberQS {
     const allMembers = await this.prismaClient.member.findMany({
       include: {
         pair: true,
-        memberTasks:　{
+        memberTasks: {
           include: { task: true },
         },
-      }
+      },
     })
     return allMembers.map(
       (MemberDM) =>
@@ -33,8 +33,9 @@ export class MemberQS implements IMemberQS {
               id: task.id,
               taskId: task.taskId,
               content: task.task.content,
-              progressStatus: task.progressStatus
-            }})
+              progressStatus: task.progressStatus,
+            }
+          }),
         }),
     )
   }
@@ -42,11 +43,11 @@ export class MemberQS implements IMemberQS {
   public async getById(id: string): Promise<MemberDetailDTO | null> {
     const member = await this.prismaClient.member.findUnique({
       where: {
-        id: id
+        id: id,
       },
       include: {
         pair: true,
-      }
+      },
     })
 
     const memberTasks = await this.prismaClient.task.findMany({
@@ -59,26 +60,31 @@ export class MemberQS implements IMemberQS {
             progressStatus: true,
           },
           where: {
-            memberId: id
-          }
+            memberId: id,
+          },
         },
-      }
+      },
     })
 
-    return member ?
-      new MemberDetailDTO({
-        id: member.id,
-        name: member.name,
-        email: member.email,
-        activityStatus: member.activityStatus,
-        pair: member.pair,
-        tasks: memberTasks.map((task) => {
-          return {
-            id: task.id,
-            memberTaskId: task.memberTasks[0] ? task.memberTasks[0].id : undefined,
-            progressStatus: task.memberTasks[0] ? task.memberTasks[0].progressStatus : "NOTYET",
-          }
+    return member
+      ? new MemberDetailDTO({
+          id: member.id,
+          name: member.name,
+          email: member.email,
+          activityStatus: member.activityStatus,
+          pair: member.pair,
+          tasks: memberTasks.map((task) => {
+            return {
+              id: task.id,
+              memberTaskId: task.memberTasks[0]
+                ? task.memberTasks[0].id
+                : undefined,
+              progressStatus: task.memberTasks[0]
+                ? task.memberTasks[0].progressStatus
+                : 'NOTYET',
+            }
+          }),
         })
-      }) : null
+      : null
   }
 }

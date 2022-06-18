@@ -7,8 +7,8 @@ import { TeamService } from 'src/domain/services/team'
 import { ITeamRepository } from './repository-interface/team-repository'
 
 interface MemberPrams {
-  name: string,
-  email: string,
+  name: string
+  email: string
 }
 
 export class CreateMemberUseCase {
@@ -16,23 +16,31 @@ export class CreateMemberUseCase {
   private readonly memberRepo: IMemberRepository
   private readonly teamRepo: ITeamRepository
 
-  public constructor(memberRepo: IMemberRepository, taskRepo: ITaskRepository, teamRepo: ITeamRepository) {
+  public constructor(
+    memberRepo: IMemberRepository,
+    taskRepo: ITaskRepository,
+    teamRepo: ITeamRepository,
+  ) {
     this.memberRepo = memberRepo
     this.taskRepo = taskRepo
     this.teamRepo = teamRepo
   }
 
   public async do(params: MemberPrams): Promise<Member> {
-    const { name, email} = params
+    const { name, email } = params
 
     // Email Check
     if (await MemberService.isSameEmailExist(email, this.memberRepo)) {
-      throw new Error("There is member with the same name.")
+      throw new Error('There is member with the same name.')
     }
 
     // Memberの作成
-    const member = await MemberFactory.create({ name: name, email: email, taskRepo: this.taskRepo} )
-    const result = await this.memberRepo.save(member) as Member
+    const member = await MemberFactory.create({
+      name: name,
+      email: email,
+      taskRepo: this.taskRepo,
+    })
+    const result = (await this.memberRepo.save(member)) as Member
 
     // Team, Pairへのアサイン
     const teamService = new TeamService(this.teamRepo)
@@ -44,4 +52,3 @@ export class CreateMemberUseCase {
     return result
   }
 }
-

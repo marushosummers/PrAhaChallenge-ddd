@@ -15,7 +15,7 @@ export class TeamRepository implements ITeamRepository {
           select: {
             id: true,
             name: true,
-            members: true
+            members: true,
           },
         },
       },
@@ -25,7 +25,14 @@ export class TeamRepository implements ITeamRepository {
         new Team({
           id: TeamDM.id,
           name: TeamDM.name,
-          pairs: TeamDM.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) })),
+          pairs: TeamDM.pairs.map(
+            (pair) =>
+              new Pair({
+                id: pair.id,
+                name: pair.name,
+                memberIds: pair.members.map((member) => member.id),
+              }),
+          ),
         }),
     )
   }
@@ -37,13 +44,13 @@ export class TeamRepository implements ITeamRepository {
           select: {
             id: true,
             name: true,
-            members: true
+            members: true,
           },
         },
       },
       where: {
         id: id,
-      }
+      },
     })
 
     if (!team) {
@@ -53,7 +60,14 @@ export class TeamRepository implements ITeamRepository {
     return new Team({
       id: team.id,
       name: team.name,
-      pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
+      pairs: team.pairs.map(
+        (pair) =>
+          new Pair({
+            id: pair.id,
+            name: pair.name,
+            memberIds: pair.members.map((member) => member.id),
+          }),
+      ),
     })
   }
 
@@ -64,13 +78,13 @@ export class TeamRepository implements ITeamRepository {
           select: {
             id: true,
             name: true,
-            members: true
+            members: true,
           },
         },
       },
       where: {
-        name: name
-      }
+        name: name,
+      },
     })
 
     if (!team) {
@@ -80,7 +94,14 @@ export class TeamRepository implements ITeamRepository {
     return new Team({
       id: team.id,
       name: team.name,
-      pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
+      pairs: team.pairs.map(
+        (pair) =>
+          new Pair({
+            id: pair.id,
+            name: pair.name,
+            memberIds: pair.members.map((member) => member.id),
+          }),
+      ),
     })
   }
 
@@ -91,7 +112,7 @@ export class TeamRepository implements ITeamRepository {
       },
       where: {
         id: pairId,
-      }
+      },
     })
 
     if (!pair) {
@@ -104,13 +125,13 @@ export class TeamRepository implements ITeamRepository {
           select: {
             id: true,
             name: true,
-            members: true
+            members: true,
           },
         },
       },
       where: {
         id: pair.teamId,
-      }
+      },
     })
 
     if (!team) {
@@ -120,7 +141,14 @@ export class TeamRepository implements ITeamRepository {
     const TeamEntity = new Team({
       id: team.id,
       name: team.name,
-      pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
+      pairs: team.pairs.map(
+        (pair) =>
+          new Pair({
+            id: pair.id,
+            name: pair.name,
+            memberIds: pair.members.map((member) => member.id),
+          }),
+      ),
     })
 
     return TeamEntity
@@ -133,7 +161,7 @@ export class TeamRepository implements ITeamRepository {
       },
       where: {
         id: memberId,
-      }
+      },
     })
 
     if (!member || !member.pair) {
@@ -146,13 +174,13 @@ export class TeamRepository implements ITeamRepository {
           select: {
             id: true,
             name: true,
-            members: true
+            members: true,
           },
         },
       },
       where: {
         id: member.pair.teamId,
-      }
+      },
     })
 
     if (!team) {
@@ -162,7 +190,14 @@ export class TeamRepository implements ITeamRepository {
     const TeamEntity = new Team({
       id: team.id,
       name: team.name,
-      pairs: team.pairs.map((pair) => new Pair({ id: pair.id, name: pair.name, memberIds: pair.members.map((member) => member.id) }))
+      pairs: team.pairs.map(
+        (pair) =>
+          new Pair({
+            id: pair.id,
+            name: pair.name,
+            memberIds: pair.members.map((member) => member.id),
+          }),
+      ),
     })
 
     return TeamEntity
@@ -180,40 +215,46 @@ export class TeamRepository implements ITeamRepository {
       },
     })
 
-    const savedPairs = await Promise.all(pairs.map(async (pair) => {
-      const savedPair = await this.prismaClient.pair.upsert({
-        where: {
-          id: pair.id,
-        },
-        update: {
-          name: pair.name,
-          teamId: id
-        },
-        create: {
-          id: pair.id,
-          name: pair.name,
-          teamId: id
-        }
-      })
-
-      // TODO: Memberの所属は別テーブルで持った方が綺麗
-      const savedMembers = await Promise.all(pair.getAllProperties().memberIds.map(async (memberId) => {
-        const savedMember = await this.prismaClient.member.update({
+    const savedPairs = await Promise.all(
+      pairs.map(async (pair) => {
+        const savedPair = await this.prismaClient.pair.upsert({
           where: {
-            id: memberId,
+            id: pair.id,
           },
-          data: {
-            pairId: pair.id
+          update: {
+            name: pair.name,
+            teamId: id,
+          },
+          create: {
+            id: pair.id,
+            name: pair.name,
+            teamId: id,
           },
         })
-        return savedMember
-      }))
-      return savedMembers
-    }))
+
+        // TODO: Memberの所属は別テーブルで持った方が綺麗
+        const savedMembers = await Promise.all(
+          pair.getAllProperties().memberIds.map(async (memberId) => {
+            const savedMember = await this.prismaClient.member.update({
+              where: {
+                id: memberId,
+              },
+              data: {
+                pairId: pair.id,
+              },
+            })
+            return savedMember
+          }),
+        )
+        return savedMembers
+      }),
+    )
   }
 
   public async deleteById(id: string): Promise<void> {
-    const deletePair = this.prismaClient.pair.deleteMany({ where: { teamId: id } })
+    const deletePair = this.prismaClient.pair.deleteMany({
+      where: { teamId: id },
+    })
     const deleteTeam = this.prismaClient.team.delete({ where: { id: id } })
     await this.prismaClient.$transaction([deletePair, deleteTeam])
   }

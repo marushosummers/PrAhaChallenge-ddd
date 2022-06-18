@@ -16,12 +16,11 @@ export class DeleteTaskUseCase {
     const task = await this.taskRepo.getById(id)
 
     if (!task) {
-      throw new Error();
+      throw new Error()
     } else {
       await this.memberRepo.deleteMemberTasksByTaskId(task.id)
-      await this.taskRepo.deleteById(task.id);
+      await this.taskRepo.deleteById(task.id)
       return task
     }
   }
 }
-

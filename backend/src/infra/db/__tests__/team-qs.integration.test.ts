@@ -22,7 +22,7 @@ describe('team-qs.integration.ts', () => {
         name: 1,
         pairs: [],
       })
-      await seedTeam({id: TeamExpected.id, name: TeamExpected.name})
+      await seedTeam({ id: TeamExpected.id, name: TeamExpected.name })
 
       const teams = await teamQS.getAll()
       expect(teams).toHaveLength(1)

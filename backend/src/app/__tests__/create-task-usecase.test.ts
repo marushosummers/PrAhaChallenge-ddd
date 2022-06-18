@@ -24,23 +24,37 @@ describe('do', () => {
       mockMemberRepository = mocked(new MemberRepository(prisma), true)
     })
     it('例外が発生しない', async () => {
-      const taskId = faker.datatype.uuid();
-      const content = "testContent"
-      const memberId = faker.datatype.uuid();
-      const name = "testMemberName"
+      const taskId = faker.datatype.uuid()
+      const content = 'testContent'
+      const memberId = faker.datatype.uuid()
+      const name = 'testMemberName'
       const email = faker.internet.email()
-      const activityStatus = "ONGOING"
+      const activityStatus = 'ONGOING'
       const memberTasks: MemberTask[] = []
       const expectedReponse = new Task({ id: taskId, content: content })
 
-      mockTask = mocked(new Task({ id: taskId, content: content}), true)
-      mockMember = mocked(new Member({ id: memberId, name: name, email: email, activityStatus: activityStatus, memberTasks: memberTasks}), true)
+      mockTask = mocked(new Task({ id: taskId, content: content }), true)
+      mockMember = mocked(
+        new Member({
+          id: memberId,
+          name: name,
+          email: email,
+          activityStatus: activityStatus,
+          memberTasks: memberTasks,
+        }),
+        true,
+      )
       mockTaskRepository.save.mockResolvedValueOnce(mockTask)
       mockMemberRepository.save.mockResolvedValueOnce([mockMember])
       mockMemberRepository.getAll.mockResolvedValueOnce([mockMember])
 
-      const usecase = new CreateTaskUseCase(mockTaskRepository, mockMemberRepository)
-      await expect(usecase.do({ content: content })).resolves.toStrictEqual(expectedReponse)
+      const usecase = new CreateTaskUseCase(
+        mockTaskRepository,
+        mockMemberRepository,
+      )
+      await expect(usecase.do({ content: content })).resolves.toStrictEqual(
+        expectedReponse,
+      )
     })
   })
 })

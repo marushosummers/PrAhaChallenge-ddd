@@ -21,8 +21,6 @@ describe('do', () => {
     const ERROR_MESSAGE = 'error!'
     mockTaskQS.getAll.mockRejectedValueOnce(ERROR_MESSAGE)
     const usecase = new GetTaskUseCase(mockTaskQS)
-    return expect(
-      usecase.do(),
-    ).rejects.toEqual(ERROR_MESSAGE)
+    return expect(usecase.do()).rejects.toEqual(ERROR_MESSAGE)
   })
 })

@@ -18,7 +18,7 @@ export class TaskRepository implements ITaskRepository {
     })
     const savedTaskEntity = new Task({
       id: createTask.id,
-      content: createTask.content
+      content: createTask.content,
     })
     return savedTaskEntity
   }
@@ -27,7 +27,7 @@ export class TaskRepository implements ITaskRepository {
     const task = await this.prismaClient.task.findUnique({
       where: {
         id: id,
-      }
+      },
     })
 
     if (!task) {
@@ -42,7 +42,6 @@ export class TaskRepository implements ITaskRepository {
     return taskEntity
   }
 
-
   public async getAll(): Promise<Task[] | null> {
     const allTasks = await this.prismaClient.task.findMany()
     return allTasks.map(
@@ -50,10 +49,13 @@ export class TaskRepository implements ITaskRepository {
         new Task({
           ...TaskDM,
         }),
-    )}
+    )
+  }
 
   public async deleteById(id: string): Promise<void> {
-    const deleteMemberTasks = this.prismaClient.memberTask.deleteMany({ where: { taskId: id } })
+    const deleteMemberTasks = this.prismaClient.memberTask.deleteMany({
+      where: { taskId: id },
+    })
     const deleteTask = this.prismaClient.task.delete({ where: { id: id } })
     await this.prismaClient.$transaction([deleteMemberTasks, deleteTask])
   }

@@ -6,7 +6,10 @@ export class MovePairUseCase {
   public constructor(teamRepo: ITeamRepository) {
     this.teamRepo = teamRepo
   }
-  public async do(params: { pairId: string, newTeamId: string }): Promise<void> {
+  public async do(params: {
+    pairId: string
+    newTeamId: string
+  }): Promise<void> {
     const { pairId, newTeamId } = params
 
     const teamService = new TeamService(this.teamRepo)
@@ -14,4 +17,3 @@ export class MovePairUseCase {
     await teamService.movePair(pairId, newTeamId)
   }
 }
-

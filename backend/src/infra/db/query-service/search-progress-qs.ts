@@ -10,11 +10,14 @@ export class SearchProgressQS implements ISearchProgressQS {
     this.prismaClient = prismaClient
   }
 
-  public async getAll(taskids: string[], progress: string): Promise<SearchProgressDTO[]> {
+  public async getAll(
+    taskids: string[],
+    progress: string,
+  ): Promise<SearchProgressDTO[]> {
     const allSearchProgresss = await this.prismaClient.memberTask.findMany({
       include: {
         task: true,
-        member: true
+        member: true,
       },
       where: {
         AND: {
@@ -36,14 +39,18 @@ export class SearchProgressQS implements ISearchProgressQS {
           taskContent: SearchProgressDM.task.content,
           taskProgressStatus: SearchProgressDM.progressStatus,
           memberId: SearchProgressDM.member.id,
-          memberName: SearchProgressDM.member.name
+          memberName: SearchProgressDM.member.name,
         }),
     )
   }
 
-  public async get10records(taskids: string[], progress: string, cursor?: string): Promise<SearchProgressDTO[]> {
-    const skipCount: number = 10;
-    let result: any[];
+  public async get10records(
+    taskids: string[],
+    progress: string,
+    cursor?: string,
+  ): Promise<SearchProgressDTO[]> {
+    const skipCount: number = 10
+    let result: any[]
     if (typeof cursor === 'string') {
       result = await this.prismaClient.memberTask.findMany({
         take: skipCount,
@@ -53,7 +60,7 @@ export class SearchProgressQS implements ISearchProgressQS {
         },
         include: {
           task: true,
-          member: true
+          member: true,
         },
         where: {
           AND: {
@@ -74,7 +81,7 @@ export class SearchProgressQS implements ISearchProgressQS {
         take: skipCount,
         include: {
           task: true,
-          member: true
+          member: true,
         },
         where: {
           AND: {
@@ -100,7 +107,7 @@ export class SearchProgressQS implements ISearchProgressQS {
           taskContent: SearchProgressDM.task.content,
           taskProgressStatus: SearchProgressDM.progressStatus,
           memberId: SearchProgressDM.member.id,
-          memberName: SearchProgressDM.member.name
+          memberName: SearchProgressDM.member.name,
         }),
     )
   }

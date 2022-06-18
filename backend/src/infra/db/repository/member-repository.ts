@@ -15,7 +15,7 @@ export class MemberRepository implements IMemberRepository {
         memberTasks: {
           include: { task: true },
         },
-      }
+      },
     })
     return allMembers.map(
       (MemberDM) =>
@@ -28,72 +28,73 @@ export class MemberRepository implements IMemberRepository {
             return new MemberTask({
               id: task.id,
               taskId: task.taskId,
-              progressStatus: task.progressStatus as TaskProgressStatus // NOTE: これはasの処理でいいのか？
+              progressStatus: task.progressStatus as TaskProgressStatus, // NOTE: これはasの処理でいいのか？
             })
-          })
-        })
+          }),
+        }),
     )
   }
 
   public async getById(id: string): Promise<Member | null> {
     const member = await this.prismaClient.member.findUnique({
       where: {
-        id: id
+        id: id,
       },
       include: {
         pair: true,
-      }
+      },
     })
 
     const memberTasks = await this.prismaClient.memberTask.findMany({
       where: {
-        memberId: id
-      }
+        memberId: id,
+      },
     })
 
-    return member ?
-      new Member({
-        id: member.id,
-        name: member.name,
-        email: member.email,
-        activityStatus: member.activityStatus,
-        memberTasks: memberTasks.map((task) => {
-          return new MemberTask({
-            id: task.id,
-            taskId: task.taskId,
-            progressStatus: task.progressStatus as TaskProgressStatus // NOTE: これはasの処理でいいのか？
-          })
+    return member
+      ? new Member({
+          id: member.id,
+          name: member.name,
+          email: member.email,
+          activityStatus: member.activityStatus,
+          memberTasks: memberTasks.map((task) => {
+            return new MemberTask({
+              id: task.id,
+              taskId: task.taskId,
+              progressStatus: task.progressStatus as TaskProgressStatus, // NOTE: これはasの処理でいいのか？
+            })
+          }),
         })
-      }):null
+      : null
   }
-
 
   public async getByEmail(email: string): Promise<Member | null> {
     const member = await this.prismaClient.member.findUnique({
       where: {
-        email: email
+        email: email,
       },
       include: {
         pair: true,
         memberTasks: {
           include: { task: true },
         },
-      }
+      },
     })
-    return member ?
-      new Member({
-        id: member.id,
-        name: member.name,
-        email: member.email,
-        activityStatus: member.activityStatus,
-        memberTasks: member.memberTasks.map((task) => {
-          return new MemberTask({
-            id: task.id,
-            taskId: task.taskId,
-            progressStatus: task.progressStatus as TaskProgressStatus // NOTE: これはasの処理でいいのか？
-          })
+    return member
+      ? new Member({
+          id: member.id,
+          name: member.name,
+          email: member.email,
+          activityStatus: member.activityStatus,
+          memberTasks: member.memberTasks.map((task) => {
+            return new MemberTask({
+              id: task.id,
+              taskId: task.taskId,
+              progressStatus: task.progressStatus as TaskProgressStatus, // NOTE: これはasの処理でいいのか？
+            })
+          }),
         })
-      }) : null
+      : null
   }
 
   public async save(members: Member | Member[]): Promise<Member | Member[]> {
@@ -101,58 +102,63 @@ export class MemberRepository implements IMemberRepository {
       members = [members]
     }
 
-    const savedMembers: Member[] = await Promise.all(members.map(async (member) => {
+    const savedMembers: Member[] = await Promise.all(
+      members.map(async (member) => {
+        const memberProps = member.getAllProperties()
 
-      const memberProps = member.getAllProperties()
-
-      await this.prismaClient.member.upsert({
-        where: {
-          id: memberProps.id
-        },
-        update: {
-          name: memberProps.name,
-          email: memberProps.email,
-          activityStatus: memberProps.activityStatus
-        },
-        create: {
-          id: memberProps.id,
-          name: memberProps.name,
-          email: memberProps.email,
-          activityStatus: memberProps.activityStatus
-        },
-      })
-
-      await Promise.all(member.getAllProperties().memberTasks.map(async (task) => {
-        const taskProps = task.getAllProperties()
-        await this.prismaClient.memberTask.upsert({
+        await this.prismaClient.member.upsert({
           where: {
-            id: taskProps.id,
+            id: memberProps.id,
           },
           update: {
-            memberId: memberProps.id,
-            taskId: taskProps.taskId,
-            progressStatus: taskProps.progressStatus,
+            name: memberProps.name,
+            email: memberProps.email,
+            activityStatus: memberProps.activityStatus,
           },
           create: {
-            id: taskProps.id,
-            memberId: memberProps.id,
-            taskId: taskProps.taskId,
-            progressStatus: taskProps.progressStatus,
+            id: memberProps.id,
+            name: memberProps.name,
+            email: memberProps.email,
+            activityStatus: memberProps.activityStatus,
           },
         })
-      }));
 
-      // NOTE: returnされた値のオブジェクトを返すべき？
-      const savedMember  = new Member({
-        ...member.getAllProperties(),
-      })
-      return savedMember
-    }))
+        await Promise.all(
+          member.getAllProperties().memberTasks.map(async (task) => {
+            const taskProps = task.getAllProperties()
+            await this.prismaClient.memberTask.upsert({
+              where: {
+                id: taskProps.id,
+              },
+              update: {
+                memberId: memberProps.id,
+                taskId: taskProps.taskId,
+                progressStatus: taskProps.progressStatus,
+              },
+              create: {
+                id: taskProps.id,
+                memberId: memberProps.id,
+                taskId: taskProps.taskId,
+                progressStatus: taskProps.progressStatus,
+              },
+            })
+          }),
+        )
+
+        // NOTE: returnされた値のオブジェクトを返すべき？
+        const savedMember = new Member({
+          ...member.getAllProperties(),
+        })
+        return savedMember
+      }),
+    )
     return savedMembers
   }
 
   public async deleteById(id: string): Promise<void> {
-    const deleteMemberTasks = this.prismaClient.memberTask.deleteMany({ where: { memberId: id } })
+    const deleteMemberTasks = this.prismaClient.memberTask.deleteMany({
+      where: { memberId: id },
+    })
     const deleteMember = this.prismaClient.member.delete({ where: { id: id } })
     await this.prismaClient.$transaction([deleteMemberTasks, deleteMember])
   }
@@ -160,5 +166,4 @@ export class MemberRepository implements IMemberRepository {
   public async deleteMemberTasksByTaskId(taskId: string): Promise<void> {
     await this.prismaClient.memberTask.deleteMany({ where: { taskId: taskId } })
   }
-
 }
