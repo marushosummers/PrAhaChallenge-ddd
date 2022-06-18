@@ -34,7 +34,7 @@ const genFakeTeam = (teamName: number, fakeTasks: any[]) => (
                 }
               }
             ))
-            }
+          }
         },
         {
           id: faker.datatype.uuid(),
@@ -59,7 +59,7 @@ const genFakeTeam = (teamName: number, fakeTasks: any[]) => (
                 }
               }
             ))
-            }
+          }
         },
       ]
     }
