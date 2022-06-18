@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Put,
+} from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetMemberResponse } from './response/get-member-response'
 import { GetMemberUseCase } from '../app/get-member-usecase'
@@ -20,7 +31,6 @@ import { TeamRepository } from 'src/infra/db/repository/team-repository'
   path: '/member',
 })
 export class MemberController {
-
   @Get()
   @ApiResponse({ status: 200, type: GetMemberResponse })
   async getMember(): Promise<GetMemberResponse> {
@@ -42,7 +52,10 @@ export class MemberController {
     const usecase = new CreateMemberUseCase(memberRepo, taskRepo, teamRepo)
 
     try {
-      const member = await usecase.do({ name: postMemberDTO.name, email: postMemberDTO.email})
+      const member = await usecase.do({
+        name: postMemberDTO.name,
+        email: postMemberDTO.email,
+      })
       return member
     } catch (e) {
       if (e instanceof Error) {
@@ -52,15 +65,15 @@ export class MemberController {
             error: e.message,
           },
           500,
-        );
+        )
       } else {
         throw new HttpException(
           {
             status: HttpStatus.INTERNAL_SERVER_ERROR,
-            error: "Internal server error",
+            error: 'Internal server error',
           },
           500,
-        );
+        )
       }
     }
   }
@@ -77,7 +90,12 @@ export class MemberController {
     const usecase = new UpdateMemberUseCase(memberRepo)
 
     try {
-      const member = await usecase.do({ id: id, name: putMemberDTO.name, email: putMemberDTO.email, activityStatus: putMemberDTO.activityStatus })
+      const member = await usecase.do({
+        id: id,
+        name: putMemberDTO.name,
+        email: putMemberDTO.email,
+        activityStatus: putMemberDTO.activityStatus,
+      })
       return member
     } catch (e) {
       if (e instanceof Error) {
@@ -87,15 +105,15 @@ export class MemberController {
             error: e.message,
           },
           500,
-        );
+        )
       } else {
         throw new HttpException(
           {
             status: HttpStatus.INTERNAL_SERVER_ERROR,
-            error: "Internal server error",
+            error: 'Internal server error',
           },
           500,
-        );
+        )
       }
     }
   }
@@ -113,7 +131,11 @@ export class MemberController {
     const usecase = new UpdateMemberTaskUseCase(memberRepo)
 
     try {
-      const member = await usecase.do({ id: id, memberTaskId: memberTaskId, taskProgressStatus: patchMemberTaskDTO.taskProgressStatus })
+      const member = await usecase.do({
+        id: id,
+        memberTaskId: memberTaskId,
+        taskProgressStatus: patchMemberTaskDTO.taskProgressStatus,
+      })
       return member
     } catch (e) {
       if (e instanceof Error) {
@@ -123,22 +145,22 @@ export class MemberController {
             error: e.message,
           },
           500,
-        );
+        )
       } else {
         throw new HttpException(
           {
             status: HttpStatus.INTERNAL_SERVER_ERROR,
-            error: "Internal server error",
+            error: 'Internal server error',
           },
           500,
-        );
+        )
       }
     }
   }
 
-  @Delete("/:id")
+  @Delete('/:id')
   @ApiResponse({ status: 200 })
-  async deleteMember(@Param("id") id: string): Promise<Member> {
+  async deleteMember(@Param('id') id: string): Promise<Member> {
     const prisma = new PrismaClient()
     const memberRepo = new MemberRepository(prisma)
     const teamRepo = new TeamRepository(prisma)
@@ -147,4 +169,3 @@ export class MemberController {
     return member
   }
 }
-

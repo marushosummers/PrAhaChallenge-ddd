@@ -2,7 +2,7 @@ export class Task {
   public readonly id: string
   private content: string
 
-  public constructor(props: { id: string, content: string }) {
+  public constructor(props: { id: string; content: string }) {
     const { id, content } = props
     this.id = id
     this.content = content
@@ -11,7 +11,7 @@ export class Task {
   public getAllProperties() {
     return {
       id: this.id,
-      content: this.content
+      content: this.content,
     }
   }
 }

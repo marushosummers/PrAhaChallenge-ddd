@@ -27,24 +27,45 @@ describe('do', () => {
       mockMemberRepository = mocked(new MemberRepository(prisma), true)
     })
     it('例外が発生しない', async () => {
-      const taskId = faker.datatype.uuid();
-      const content = "testContent"
-      const memberId = faker.datatype.uuid();
-      const name = "testMemberName"
+      const taskId = faker.datatype.uuid()
+      const content = 'testContent'
+      const memberId = faker.datatype.uuid()
+      const name = 'testMemberName'
       const email = faker.internet.email()
-      const activityStatus = "ONGOING"
+      const activityStatus = 'ONGOING'
       const memberTasks: MemberTask[] = []
-      const expectedReponse = new Member({ id: memberId, name: name, email: email, activityStatus: activityStatus, memberTasks: memberTasks})
+      const expectedReponse = new Member({
+        id: memberId,
+        name: name,
+        email: email,
+        activityStatus: activityStatus,
+        memberTasks: memberTasks,
+      })
 
-      mockTask = mocked(new Task({ id: taskId, content: content}), true)
-      mockMember = mocked(new Member({ id: memberId, name: name, email: email, activityStatus: activityStatus, memberTasks: memberTasks}), true)
+      mockTask = mocked(new Task({ id: taskId, content: content }), true)
+      mockMember = mocked(
+        new Member({
+          id: memberId,
+          name: name,
+          email: email,
+          activityStatus: activityStatus,
+          memberTasks: memberTasks,
+        }),
+        true,
+      )
       mockTaskRepository.save.mockResolvedValueOnce(mockTask)
       mockTaskRepository.getAll.mockResolvedValueOnce([mockTask])
       mockMemberRepository.save.mockResolvedValueOnce([mockMember])
       mockMemberRepository.getAll.mockResolvedValueOnce([mockMember])
 
-      const usecase = new CreateMemberUseCase(mockMemberRepository, mockTaskRepository, mockTeamRepository)
-      return expect(usecase.do({ name: name, email: email })).resolves.toStrictEqual([expectedReponse])
+      const usecase = new CreateMemberUseCase(
+        mockMemberRepository,
+        mockTaskRepository,
+        mockTeamRepository,
+      )
+      return expect(
+        usecase.do({ name: name, email: email }),
+      ).resolves.toStrictEqual([expectedReponse])
     })
   })
 })

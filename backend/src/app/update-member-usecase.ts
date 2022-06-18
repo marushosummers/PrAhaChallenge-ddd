@@ -3,10 +3,10 @@ import { Member, ActivityStatus } from 'src/domain/entities/Member'
 import { MemberService } from 'src/domain/services/member'
 
 interface MemberPrams {
-  id: string,
-  name: string,
-  email: string,
-  activityStatus: ActivityStatus,
+  id: string
+  name: string
+  email: string
+  activityStatus: ActivityStatus
 }
 
 export class UpdateMemberUseCase {
@@ -22,7 +22,7 @@ export class UpdateMemberUseCase {
     const member = await this.memberRepo.getById(id)
 
     if (!member) {
-      throw new Error("Not Found.")
+      throw new Error('Not Found.')
     }
 
     // Email Check
@@ -30,7 +30,7 @@ export class UpdateMemberUseCase {
       // Email will not be updated.
       // Skip Email Check.
     } else if (await MemberService.isSameEmailExist(email, this.memberRepo)) {
-      throw new Error("Email is already used.")
+      throw new Error('Email is already used.')
     }
 
     member.setName(name)
@@ -39,9 +39,8 @@ export class UpdateMemberUseCase {
     // TODO: 在籍ステータスによってPairから抜ける/入るの制約を入れる
     member.setActivityStatus(activityStatus)
 
-    const savedMember = await this.memberRepo.save(member) as Member
+    const savedMember = (await this.memberRepo.save(member)) as Member
 
     return savedMember
   }
 }
-

@@ -1,4 +1,4 @@
-import { ActivityStatus } from "src/domain/entities/Member"
+import { ActivityStatus } from 'src/domain/entities/Member'
 
 export class MemberDTO {
   public readonly id: string
@@ -8,7 +8,14 @@ export class MemberDTO {
   public readonly pair: any
   public readonly tasks: any
 
-  public constructor(props: { id: string, name: string, email: string, activityStatus: ActivityStatus, pair: any, tasks: any }) {
+  public constructor(props: {
+    id: string
+    name: string
+    email: string
+    activityStatus: ActivityStatus
+    pair: any
+    tasks: any
+  }) {
     const { id, name, email, activityStatus, pair, tasks } = props
     this.id = id
     this.name = name
@@ -27,7 +34,14 @@ export class MemberDetailDTO {
   public readonly pair: any
   public readonly tasks: any
 
-  public constructor(props: { id: string, name: string, email: string, activityStatus: ActivityStatus, pair: any, tasks: any }) {
+  public constructor(props: {
+    id: string
+    name: string
+    email: string
+    activityStatus: ActivityStatus
+    pair: any
+    tasks: any
+  }) {
     const { id, name, email, activityStatus, pair, tasks } = props
     this.id = id
     this.name = name

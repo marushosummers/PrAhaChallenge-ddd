@@ -3,7 +3,6 @@ import { TaskFactory } from 'src/domain/factory/task'
 import { ITaskRepository } from './repository-interface/task-repository'
 import { IMemberRepository } from './repository-interface/member-repository'
 
-
 export class CreateTaskUseCase {
   private readonly taskRepo: ITaskRepository
   private readonly memberRepo: IMemberRepository
@@ -17,14 +16,13 @@ export class CreateTaskUseCase {
     const { content } = params
 
     // Taskの作成
-    const task = TaskFactory.create({ content: content } )
+    const task = TaskFactory.create({ content: content })
     const result = await this.taskRepo.save(task)
 
     // TaskMemberの作成
     const allMembers = await this.memberRepo.getAll()
-    allMembers.forEach(member => member.assignNewTask(task.id))
+    allMembers.forEach((member) => member.assignNewTask(task.id))
     this.memberRepo.save(allMembers)
     return result
   }
 }
-

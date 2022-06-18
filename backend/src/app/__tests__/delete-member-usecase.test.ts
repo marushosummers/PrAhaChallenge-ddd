@@ -22,16 +22,28 @@ describe('do', () => {
       mockTeamRepository = mocked(new TeamRepository(prisma), true)
     })
     it('例外が発生しない', async () => {
-      const memberId = faker.datatype.uuid();
-      const name = "testMemberName"
+      const memberId = faker.datatype.uuid()
+      const name = 'testMemberName'
       const email = faker.internet.email()
-      const activityStatus = "ONGOING"
+      const activityStatus = 'ONGOING'
       const memberTasks: MemberTask[] = []
 
-      mockMember = mocked(new Member({ id: memberId, name: name, email: email, activityStatus: activityStatus, memberTasks: memberTasks}), true)
+      mockMember = mocked(
+        new Member({
+          id: memberId,
+          name: name,
+          email: email,
+          activityStatus: activityStatus,
+          memberTasks: memberTasks,
+        }),
+        true,
+      )
       mockMemberRepository.getById.mockResolvedValueOnce(mockMember)
 
-      const usecase = new DeleteMemberUseCase(mockMemberRepository, mockTeamRepository)
+      const usecase = new DeleteMemberUseCase(
+        mockMemberRepository,
+        mockTeamRepository,
+      )
       await expect(usecase.do({ id: memberId })).resolves.toEqual(mockMember)
       expect(mockMemberRepository.deleteById).toHaveBeenCalled()
     })

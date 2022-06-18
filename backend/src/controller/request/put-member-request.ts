@@ -13,6 +13,6 @@ export class PutMemberRequest {
   readonly email!: string
 
   @ApiProperty()
-  @IsEnum({ ONGOING: 'ONGOING', RECESS:  'RECESS', LEFT: 'LEFT' }) // TODO: 型を使いたい
+  @IsEnum({ ONGOING: 'ONGOING', RECESS: 'RECESS', LEFT: 'LEFT' }) // TODO: 型を使いたい
   readonly activityStatus!: ActivityStatus
 }

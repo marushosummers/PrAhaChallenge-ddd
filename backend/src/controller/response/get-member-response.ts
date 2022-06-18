@@ -2,20 +2,22 @@ import { ApiProperty } from '@nestjs/swagger'
 import { MemberDTO } from 'src/app/query-service-interface/member-qs'
 
 export class GetMemberResponse {
-  @ApiProperty({ type: () => [Member] })  members: Member[]
+  @ApiProperty({ type: () => [Member] }) members: Member[]
 
   public constructor(params: { members: MemberDTO[] }) {
     const { members } = params
-    this.members = members.map(({ id, name, email, activityStatus, pair, tasks }) => {
-      return new Member({
-        id: id,
-        name: name,
-        email: email,
-        activityStatus: activityStatus,
-        pair: pair,
-        tasks: tasks
-      })
-    })
+    this.members = members.map(
+      ({ id, name, email, activityStatus, pair, tasks }) => {
+        return new Member({
+          id: id,
+          name: name,
+          email: email,
+          activityStatus: activityStatus,
+          pair: pair,
+          tasks: tasks,
+        })
+      },
+    )
   }
 }
 

@@ -15,7 +15,6 @@ import { DeleteTaskUseCase } from 'src/app/delete-task-usecase'
   path: '/task',
 })
 export class TaskController {
-
   @Get()
   @ApiResponse({ status: 200, type: GetTaskResponse })
   async getTask(): Promise<GetTaskResponse> {
@@ -38,9 +37,9 @@ export class TaskController {
     return task
   }
 
-  @Delete("/:id")
+  @Delete('/:id')
   @ApiResponse({ status: 200 })
-  async deleteTask(@Param("id") id: string): Promise<Task> {
+  async deleteTask(@Param('id') id: string): Promise<Task> {
     const prisma = new PrismaClient()
     const taskRepo = new TaskRepository(prisma)
     const memberRepo = new MemberRepository(prisma)

@@ -9,7 +9,6 @@ import { PairQS } from 'src/infra/db/query-service/pair-qs'
   path: '/pair',
 })
 export class PairController {
-
   @Get()
   @ApiResponse({ status: 200, type: GetPairResponse })
   async getPair(): Promise<GetPairResponse> {
@@ -21,4 +20,3 @@ export class PairController {
     return response
   }
 }
-

@@ -7,7 +7,7 @@ export class GetTaskResponse {
 
   public constructor(params: { tasks: TaskDTO[] }) {
     const { tasks } = params
-    this.tasks = tasks.map(({ id, content}) => {
+    this.tasks = tasks.map(({ id, content }) => {
       return new Task({
         id: id,
         content: content,
@@ -23,10 +23,7 @@ class Task {
   @ApiProperty()
   content: string
 
-  public constructor(params: {
-    id: string
-    content: string
-  }) {
+  public constructor(params: { id: string; content: string }) {
     this.id = params.id
     this.content = params.content
   }

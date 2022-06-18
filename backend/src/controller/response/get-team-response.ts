@@ -28,11 +28,7 @@ class Team {
   @ApiProperty()
   pairs: any
 
-  public constructor(params: {
-    id: string
-    name: string
-    pairs: any
-  }) {
+  public constructor(params: { id: string; name: string; pairs: any }) {
     this.id = params.id
     this.name = params.name
     this.pairs = params.pairs

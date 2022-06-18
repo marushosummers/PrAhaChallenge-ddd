@@ -1,4 +1,4 @@
-import { MemberTaskFactory } from "../factory/member"
+import { MemberTaskFactory } from '../factory/member'
 
 export class Member {
   public readonly id: string
@@ -7,7 +7,13 @@ export class Member {
   private activityStatus: ActivityStatus
   private memberTasks: MemberTask[]
 
-  public constructor(props: { id: string, name: string, email: string, activityStatus: ActivityStatus, memberTasks: MemberTask[] }) {
+  public constructor(props: {
+    id: string
+    name: string
+    email: string
+    activityStatus: ActivityStatus
+    memberTasks: MemberTask[]
+  }) {
     const { id, name, email, activityStatus, memberTasks } = props
     this.validateEmail(email)
 
@@ -32,40 +38,51 @@ export class Member {
   }
 
   public setName(name: string): void {
-    this.name = name;
+    this.name = name
   }
 
   public setEmail(email: string): void {
     this.validateEmail(email)
-    this.email = email;
+    this.email = email
   }
   public setActivityStatus(activityStatus: ActivityStatus): void {
     // TODO: Pairとの依存関係を入れる
-    this.activityStatus = activityStatus;
+    this.activityStatus = activityStatus
   }
 
-  public assignNewTask(taskId: string): void{
-    const newMemberTask = MemberTaskFactory.create({taskId: taskId})
+  public assignNewTask(taskId: string): void {
+    const newMemberTask = MemberTaskFactory.create({ taskId: taskId })
     // TODO: 同じtaskIdがある場合のエラーハンドリング
-    this.memberTasks.push(newMemberTask);
+    this.memberTasks.push(newMemberTask)
   }
 
-  public updateTaskProgressStatus(memberTaskId: string, taskProgressStatus: TaskProgressStatus): void{
-    const memberTask = this.memberTasks.find(memberTask => memberTask.id == memberTaskId)
+  public updateTaskProgressStatus(
+    memberTaskId: string,
+    taskProgressStatus: TaskProgressStatus,
+  ): void {
+    const memberTask = this.memberTasks.find(
+      (memberTask) => memberTask.id == memberTaskId,
+    )
     if (memberTask) {
       memberTask.setProgressStatus(taskProgressStatus)
     } else {
-      throw new Error("Not Found.")
+      throw new Error('Not Found.')
     }
   }
 
   public deleteTask(taskId: string): void {
-    this.memberTasks = this.memberTasks.filter(memberTask => memberTask.getAllProperties().taskId !== taskId)
+    this.memberTasks = this.memberTasks.filter(
+      (memberTask) => memberTask.getAllProperties().taskId !== taskId,
+    )
   }
 
   private validateEmail(email: string): void {
-    if (!new RegExp("^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$").test(email)) {
-      throw new Error("Invalid Email Format");
+    if (
+      !new RegExp(
+        '^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}.[A-Za-z0-9]{1,}$',
+      ).test(email)
+    ) {
+      throw new Error('Invalid Email Format')
     }
   }
 
@@ -79,16 +96,20 @@ export class Member {
 }
 
 export class MemberTask {
-  public readonly id: string;
-  private taskId: string;
-  private progressStatus: TaskProgressStatus;
+  public readonly id: string
+  private taskId: string
+  private progressStatus: TaskProgressStatus
 
-  public constructor(props: { id: string, taskId: string, progressStatus: TaskProgressStatus }) {
-    const { id, taskId, progressStatus } = props;
+  public constructor(props: {
+    id: string
+    taskId: string
+    progressStatus: TaskProgressStatus
+  }) {
+    const { id, taskId, progressStatus } = props
 
-    this.id = id;
-    this.taskId = taskId;
-    this.progressStatus = progressStatus;
+    this.id = id
+    this.taskId = taskId
+    this.progressStatus = progressStatus
   }
 
   public setProgressStatus(taskProgressStatus: TaskProgressStatus) {
@@ -96,10 +117,10 @@ export class MemberTask {
       // Already same status.
       return
     }
-    if (this.progressStatus === "DONE") {
-      throw new Error("Task is already done.")
+    if (this.progressStatus === 'DONE') {
+      throw new Error('Task is already done.')
     }
-    this.progressStatus = taskProgressStatus;
+    this.progressStatus = taskProgressStatus
   }
 
   public getAllProperties() {
@@ -111,6 +132,5 @@ export class MemberTask {
   }
 }
 
-export type ActivityStatus = 'ONGOING' | 'RECESS' | 'LEFT'; // 在籍中 | 休会中 | 退会済
-export type TaskProgressStatus = 'NOTYET' | 'REQUESTREVIEW' | 'DONE'; // 未着手 | レビュー待ち | 完了
-
+export type ActivityStatus = 'ONGOING' | 'RECESS' | 'LEFT' // 在籍中 | 休会中 | 退会済
+export type TaskProgressStatus = 'NOTYET' | 'REQUESTREVIEW' | 'DONE' // 未着手 | レビュー待ち | 完了
