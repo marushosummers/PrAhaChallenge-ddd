@@ -1,7 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import * as faker from 'faker';
-import { fake } from 'faker/locale/zh_TW';
-
 
 const prisma  = new PrismaClient();
 
