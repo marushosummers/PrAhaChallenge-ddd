@@ -3,9 +3,14 @@ import * as faker from 'faker';
 
 const prisma  = new PrismaClient();
 
+type fakeTask = {
+  id: string,
+  content: string
+}
+
 const range = (n: number): number[] => (Array(n).fill(null).map((v, k) => { return k + 1 }))
 
-const genFakeTeam = (teamName: number, fakeTasks: any[]) => (
+const genFakeTeam = (teamName: number, fakeTasks: fakeTask[]) => (
   {
     id: faker.datatype.uuid(),
     name: teamName,
@@ -67,7 +72,7 @@ const genFakeTeam = (teamName: number, fakeTasks: any[]) => (
 );
 
 async function main() {
-  const fakeTasks = range(80).map(n => (
+  const fakeTasks: fakeTask[] = range(80).map(n => (
     {
       id: faker.datatype.uuid(),
       content: `PrAhaTask${n}`,
