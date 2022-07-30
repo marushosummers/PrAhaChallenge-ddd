@@ -20,6 +20,7 @@
     "lint:fix": "yarn lint --fix",
     "studio:dev": "dotenv -e .local.env -- prisma studio",
     "migrate:dev": "dotenv -e .local.env -- prisma migrate dev --preview-feature",
+    "seed": "dotenv -e .local.env -- ts-node prisma/seed.ts",
     "model-generate": "prisma generate",
     "migrate:dev:reset": "dotenv -e .local.env -- prisma migrate reset --preview-feature",
     "migrate:test": "dotenv -e .test.env -- prisma migrate reset --force --preview-feature",
