@@ -46,7 +46,9 @@ export class Member {
     this.email = email
   }
   public setActivityStatus(activityStatus: ActivityStatus): void {
-    // TODO: Pairとの依存関係を入れる
+    if (this.activityStatus === 'RECESS') {
+      throw new Error('Cannot change Activity Status from RECESS')
+    }
     this.activityStatus = activityStatus
   }
 
