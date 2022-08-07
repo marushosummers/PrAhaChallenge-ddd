@@ -1,7 +1,7 @@
 import { ITaskRepository } from './repository-interface/task-repository'
 import { IMemberRepository } from './repository-interface/member-repository'
 import { MemberFactory } from 'src/domain/factory/member'
-import { ActivityStatus, Member } from 'src/domain/entities/Member'
+import { Member } from 'src/domain/entities/Member'
 import { MemberService } from 'src/domain/services/member'
 import { TeamService } from 'src/domain/services/team'
 import { ITeamRepository } from './repository-interface/team-repository'
