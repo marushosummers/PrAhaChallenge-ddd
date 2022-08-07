@@ -92,21 +92,21 @@ export class Team {
     if (!pair) {
       throw new Error('Not Found.')
     }
-
-    // Pairが成立しない場合は再構成を行う
+    // NOTE: Pairが成立しない場合は再構成を行う
     if (pair.getMemberCount() === pair.MIN_MEMBER) {
+      // NOTE: 移動するメンバーを取得
       const moveMemberIds = pair
         .getAllProperties()
         .memberIds.filter((id) => id !== memberId)
       this.deletePair(pair.id)
 
-      const newPair = this.getMinMemberPair()
+      // NOTE: 移動するメンバーを新しいPairに追加
       moveMemberIds.forEach((memberId) => {
-        newPair.addMember(memberId)
+        this.addMember(memberId)
       })
+    } else {
+      pair.deleteMember(memberId)
     }
-
-    pair.deleteMember(memberId)
 
     //Team/Pairの人数validation
     this.validatePairMemberCount()
@@ -217,7 +217,7 @@ export class Pair {
     const memberCount = this.getMemberCount()
     if (memberCount < this.MIN_MEMBER || this.MAX_MEMBER < memberCount) {
       throw new Error(
-        `Team should have between ${this.MIN_MEMBER} and ${this.MAX_MEMBER} members.`,
+        `Pair should have between ${this.MIN_MEMBER} and ${this.MAX_MEMBER} members.`,
       )
     }
   }
