@@ -100,12 +100,6 @@ export class Team {
         .memberIds.filter((id) => id !== memberId)
       this.deletePair(pair.id)
 
-      // NOTE:参加できるペアがなければ再編成
-      const newPair = this.getMinMemberPair()
-      if (!newPair.isJoinable()) {
-        this.dividePair(newPair)
-      }
-
       // NOTE: 移動するメンバーを新しいPairに追加
       moveMemberIds.forEach((memberId) => {
         this.addMember(memberId)
