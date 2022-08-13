@@ -56,6 +56,7 @@ export class TeamService {
     oldTeam.deletePair(pairId)
     newTeam.addPair(pair)
 
+    await this.teamRepository.save(oldTeam)
     await this.teamRepository.save(newTeam)
   }
 }

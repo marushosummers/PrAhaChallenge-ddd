@@ -43,7 +43,7 @@ export class UpdateMemberUseCase {
     // 在籍ステータスの変更
     if (member.getAllProperties().activityStatus === activityStatus) {
       // 変更がない場合はスキップ
-    } else if (activityStatus === "ONGOING") {
+    } else if (activityStatus === 'ONGOING') {
       // ステータスをONGOINGに変更し、ペアに追加する
       member.setActivityStatus(activityStatus)
 
@@ -52,29 +52,25 @@ export class UpdateMemberUseCase {
       team.addMember(member.id)
 
       await this.teamRepo.save(team)
-
-    } else if (activityStatus === "LEFT" || activityStatus === "RECESS") {
+    } else if (activityStatus === 'LEFT' || activityStatus === 'RECESS') {
       // ステータスを変更し、ペアから抜ける
       member.setActivityStatus(activityStatus)
 
       const team = await this.teamRepo.getByMemberId(member.id)
-      if (!team) {throw new Error('Not Found.')}
+      if (!team) {
+        throw new Error('Not Found.')
+      }
 
       // Team, Pairから抜けられるかチェックする
       if (team.isMemberDeletable()) {
         team.deleteMember(member.id)
-
-        await this.memberRepo.remove(member.id)
         await this.teamRepo.save(team)
       } else {
         const teamService = new TeamService(this.teamRepo)
         const newTeam = await teamService.breakup(team)
         newTeam.deleteMember(member.id)
-
-        await this.memberRepo.remove(member.id)
         await this.teamRepo.save(newTeam)
       }
-
     } else {
       throw new Error('Invalid Activity Status.')
     }

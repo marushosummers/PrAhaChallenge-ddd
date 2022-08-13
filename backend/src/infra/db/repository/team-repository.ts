@@ -232,8 +232,7 @@ export class TeamRepository implements ITeamRepository {
           },
         })
 
-        // TODO: Memberの所属は別テーブルで持った方が綺麗
-        const savedMembers = await Promise.all(
+        const savedMemberIds = await Promise.all(
           pair.getAllProperties().memberIds.map(async (memberId) => {
             const savedMember = await this.prismaClient.member.update({
               where: {
@@ -243,11 +242,27 @@ export class TeamRepository implements ITeamRepository {
                 pairId: pair.id,
               },
             })
-            return savedMember
+            return savedMember.id
           }),
         )
+
+        // NOTE: 削除されたMemberをDBに反映する
+        await this.prismaClient.member.deleteMany({
+          where: {
+            AND: {
+              pairId: {
+                equals: pair.id,
+              },
+              NOT: {
+                id: {
+                  in: savedMemberIds,
+                },
+              },
+            },
+          },
+        })
         return savedPair.id
-      })
+      }),
     )
 
     // NOTE: 削除されたPairをDBに反映する
@@ -260,11 +275,11 @@ export class TeamRepository implements ITeamRepository {
           NOT: {
             id: {
               in: savedPairIds,
-            }
-          }
-        }
-      }
-        })
+            },
+          },
+        },
+      },
+    })
   }
 
   public async deleteById(id: string): Promise<void> {

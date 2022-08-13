@@ -7,7 +7,6 @@ export interface IMemberRepository {
 
   save(members: Member | Member[]): Promise<Member | Member[]>
 
-  remove(id: string): Promise<void>
   deleteById(id: string): Promise<void>
   deleteMemberTasksByTaskId(taskId: string): Promise<void>
 }
