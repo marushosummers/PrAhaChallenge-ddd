@@ -1,11 +1,7 @@
 import * as faker from 'faker'
 import { prisma } from '@testUtil/prisma'
 
-
-export const seedTeam = async (params: {
-  id?: string
-  name?: number
-}) => {
+export const seedTeam = async (params: { id?: string; name?: number }) => {
   const { id, name } = params
   await prisma.team.create({
     data: {
@@ -14,7 +10,6 @@ export const seedTeam = async (params: {
     },
   })
 }
-
 
 export const seedPair = async (params: {
   id?: string
@@ -25,8 +20,8 @@ export const seedPair = async (params: {
   await prisma.pair.create({
     data: {
       id: id ?? faker.datatype.uuid(),
-      name: name ?? "a",
-      teamId: teamId
+      name: name ?? 'a',
+      teamId: teamId,
     },
   })
 }
@@ -41,9 +36,9 @@ export const seedMember = async (params: {
   await prisma.member.create({
     data: {
       id: id ?? faker.datatype.uuid(),
-      name: name ?? "a",
-      email: email ?? "sample@sample.com",
-      pairId: pairId
+      name: name ?? 'a',
+      email: email ?? 'sample@sample.com',
+      pairId: pairId,
     },
   })
 }

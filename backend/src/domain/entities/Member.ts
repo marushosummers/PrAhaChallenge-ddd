@@ -17,9 +17,6 @@ export class Member {
     const { id, name, email, activityStatus, memberTasks } = props
     this.validateEmail(email)
 
-    // TODO: ValidationはPairドメインに移動
-    // this.validateActivityStatus(activityStatus, pair)
-
     this.id = id
     this.name = name
     this.email = email

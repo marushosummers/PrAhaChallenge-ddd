@@ -8,7 +8,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
 } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetMemberResponse } from './response/get-member-response'

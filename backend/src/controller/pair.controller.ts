@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Patch,
+} from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetPairResponse } from './response/get-pair-response'
 import { GetPairUseCase } from '../app/get-pair-usecase'
@@ -22,7 +30,6 @@ export class PairController {
     const response = new GetPairResponse({ pairs: result })
     return response
   }
-
 
   @Patch('/:id')
   @ApiResponse({ status: 200 })

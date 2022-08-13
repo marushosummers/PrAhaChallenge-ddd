@@ -1,5 +1,4 @@
 import { IMemberRepository } from 'src/app/repository-interface/member-repository'
-import { Member } from '../entities/Member'
 
 export class MemberService {
   public static isSameEmailExist = async (

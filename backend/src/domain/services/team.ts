@@ -1,5 +1,5 @@
 import { ITeamRepository } from 'src/app/repository-interface/team-repository'
-import { Pair, Team } from '../entities/Team'
+import { Team } from '../entities/Team'
 
 export class TeamService {
   private readonly teamRepository: ITeamRepository

@@ -1,5 +1,4 @@
 import { PairFactory } from '../factory/team'
-import { Member } from './Member'
 
 export class Team {
   public readonly id: string

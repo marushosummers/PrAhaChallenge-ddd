@@ -2,7 +2,6 @@ import { IMemberRepository } from './repository-interface/member-repository'
 import { Member } from 'src/domain/entities/Member'
 import { TeamService } from 'src/domain/services/team'
 import { ITeamRepository } from './repository-interface/team-repository'
-import { Team } from 'src/domain/entities/Team'
 
 export class DeleteMemberUseCase {
   private readonly memberRepo: IMemberRepository
@@ -16,10 +15,14 @@ export class DeleteMemberUseCase {
   public async do(params: { id: string }): Promise<Member> {
     const { id } = params
     const member = await this.memberRepo.getById(id)
-    if (!member) {throw new Error('Not Found.')}
+    if (!member) {
+      throw new Error('Not Found.')
+    }
 
     const team = await this.teamRepo.getByMemberId(member.id)
-    if (!team) {throw new Error('Not Found.')}
+    if (!team) {
+      throw new Error('Not Found.')
+    }
 
     // Team, Pairから抜けられるかチェックする
     if (team.isMemberDeletable()) {
@@ -34,6 +37,5 @@ export class DeleteMemberUseCase {
 
     await this.memberRepo.deleteById(member.id)
     return member
-
   }
 }
