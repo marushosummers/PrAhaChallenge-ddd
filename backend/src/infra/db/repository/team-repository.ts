@@ -215,7 +215,7 @@ export class TeamRepository implements ITeamRepository {
       },
     })
 
-    const savedPairs = await Promise.all(
+    const savedPairIds = await Promise.all(
       pairs.map(async (pair) => {
         const savedPair = await this.prismaClient.pair.upsert({
           where: {
@@ -246,9 +246,25 @@ export class TeamRepository implements ITeamRepository {
             return savedMember
           }),
         )
-        return savedMembers
-      }),
+        return savedPair.id
+      })
     )
+
+    // NOTE: 削除されたPairをDBに反映する
+    await this.prismaClient.pair.deleteMany({
+      where: {
+        AND: {
+          teamId: {
+            equals: team.id,
+          },
+          NOT: {
+            id: {
+              in: savedPairIds,
+            }
+          }
+        }
+      }
+        })
   }
 
   public async deleteById(id: string): Promise<void> {

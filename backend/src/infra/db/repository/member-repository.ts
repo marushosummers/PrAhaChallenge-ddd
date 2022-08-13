@@ -97,6 +97,17 @@ export class MemberRepository implements IMemberRepository {
       : null
   }
 
+  public async remove(id: string): Promise<void> {
+    const member = await this.prismaClient.member.update({
+        where: {
+          id: id,
+        },
+        data: {
+          pairId: null,
+        },
+      })
+  }
+
   public async save(members: Member | Member[]): Promise<Member | Member[]> {
     if (members instanceof Member) {
       members = [members]

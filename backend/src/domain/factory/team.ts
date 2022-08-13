@@ -23,6 +23,8 @@ export class PairFactory {
     const candidateNames: string[] = alphabets.filter(
       (alphabet) => !usedNames.includes(alphabet),
     )
+    console.log(usedNames)
+    console.log(candidateNames)
 
     if (!candidateNames.length) {
       throw new Error('All alphabet is already used')

@@ -87,7 +87,8 @@ export class MemberController {
   ): Promise<Member> {
     const prisma = new PrismaClient()
     const memberRepo = new MemberRepository(prisma)
-    const usecase = new UpdateMemberUseCase(memberRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new UpdateMemberUseCase(memberRepo, teamRepo)
 
     try {
       const member = await usecase.do({

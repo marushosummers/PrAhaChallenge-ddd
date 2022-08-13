@@ -63,11 +63,15 @@ export class UpdateMemberUseCase {
       // Team, Pairから抜けられるかチェックする
       if (team.isMemberDeletable()) {
         team.deleteMember(member.id)
+
+        await this.memberRepo.remove(member.id)
         await this.teamRepo.save(team)
       } else {
         const teamService = new TeamService(this.teamRepo)
         const newTeam = await teamService.breakup(team)
         newTeam.deleteMember(member.id)
+
+        await this.memberRepo.remove(member.id)
         await this.teamRepo.save(newTeam)
       }
 
