@@ -46,8 +46,8 @@ export class Member {
     this.email = email
   }
   public setActivityStatus(activityStatus: ActivityStatus): void {
-    if (this.activityStatus === 'RECESS') {
-      throw new Error('Cannot change Activity Status from RECESS')
+    if (this.activityStatus === 'LEFT') {
+      throw new Error('Cannot change Activity Status from LEFT')
     }
     this.activityStatus = activityStatus
   }
