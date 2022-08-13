@@ -45,7 +45,6 @@ export class TeamController {
     try {
       const result = await usecase.do({
         id: id,
-        name: patchTeamDTO.name,
         pairs: patchTeamDTO.pairs.map(
           (pair) =>
             new Pair({
