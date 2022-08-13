@@ -34,7 +34,7 @@ export class PairController {
   @Patch('/:id')
   @ApiResponse({ status: 200 })
   @ApiResponse({ status: 500 })
-  async PatchMember(
+  async patchPair(
     @Param('id') id: string,
     @Body() patchPairDTO: PatchPairRequest,
   ): Promise<void> {

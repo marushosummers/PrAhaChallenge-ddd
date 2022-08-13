@@ -80,7 +80,7 @@ export class MemberController {
   @Patch('/:id')
   @ApiResponse({ status: 200, type: Member })
   @ApiResponse({ status: 500 })
-  async PutMember(
+  async putMember(
     @Param('id') id: string,
     @Body() patchMemberDTO: PatchMemberRequest,
   ): Promise<Member> {
@@ -121,7 +121,7 @@ export class MemberController {
   @Patch('/:id/task/:memberTaskId')
   @ApiResponse({ status: 200, type: Member })
   @ApiResponse({ status: 500 })
-  async PatchMemberTask(
+  async patchMemberTask(
     @Param('id') id: string,
     @Param('memberTaskId') memberTaskId: string,
     @Body() patchMemberTaskDTO: PatchMemberTaskRequest,

@@ -33,7 +33,7 @@ export class TeamController {
   @Patch('/:id')
   @ApiResponse({ status: 200, type: Team })
   @ApiResponse({ status: 500 })
-  async updateTeam(
+  async patchTeam(
     @Param('id') id: string,
     @Body() patchTeamDTO: PatchTeamRequest,
   ): Promise<Team> {
