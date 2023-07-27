@@ -1,5 +1,4 @@
 import { PairFactory } from '../factory/team'
-import { Member } from './Member'
 
 export class Team {
   public readonly id: string
@@ -58,6 +57,14 @@ export class Team {
     }
   }
 
+  private validatePairName(): void {
+    const pairNames = this.pairs.map((pair) => pair.name)
+    const pairNamesSet = new Set(pairNames)
+    if (!(pairNames.length === pairNamesSet.size)) {
+      throw new Error('Team cannot have same pair name.')
+    }
+  }
+
   private validatePairMemberCount(): void {
     this.pairs.forEach((pair) => {
       pair.validateMemberCount()
@@ -109,6 +116,27 @@ export class Team {
     }
 
     //Team/Pairの人数validation
+    this.validatePairMemberCount()
+    this.validateTeamMemberCount()
+  }
+
+  public applyPairs = (pairs: Pair[]): void => {
+    const oldMemberIds = this.pairs
+      .map((pair) => pair.getAllProperties().memberIds)
+      .reduce((prev, current) => [...prev, ...current], [])
+    const newMemberIds = pairs
+      .map((pair) => pair.getAllProperties().memberIds)
+      .reduce((prev, current) => [...prev, ...current], [])
+    const diff = newMemberIds.filter((member) => !oldMemberIds.includes(member))
+
+    if (oldMemberIds.length !== newMemberIds.length || diff.length !== 0) {
+      throw new Error('Invalid Pairs')
+    }
+
+    this.pairs = pairs
+
+    //Team/Pairのvalidation
+    this.validatePairName()
     this.validatePairMemberCount()
     this.validateTeamMemberCount()
   }

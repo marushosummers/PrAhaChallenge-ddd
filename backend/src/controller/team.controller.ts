@@ -15,7 +15,7 @@ import { TeamRepository } from 'src/infra/db/repository/team-repository'
 import { PatchTeamUseCase } from '../app/patch-team-usecase'
 import { PrismaClient } from '@prisma/client'
 import { TeamQS } from 'src/infra/db/query-service/team-qs'
-import { Team } from '../domain/entities/Team'
+import { Pair, Team } from '../domain/entities/Team'
 
 @Controller('team')
 export class TeamController {
@@ -33,7 +33,7 @@ export class TeamController {
   @Patch('/:id')
   @ApiResponse({ status: 200, type: Team })
   @ApiResponse({ status: 500 })
-  async updateTeam(
+  async patchTeam(
     @Param('id') id: string,
     @Body() patchTeamDTO: PatchTeamRequest,
   ): Promise<Team> {
@@ -45,9 +45,16 @@ export class TeamController {
     try {
       const result = await usecase.do({
         id: id,
-        name: patchTeamDTO.name,
+        pairs: patchTeamDTO.pairs.map(
+          (pair) =>
+            new Pair({
+              id: pair.id,
+              name: pair.name,
+              memberIds: pair.memberIds,
+            }),
+        ),
       })
-      return new Team({ id: 'sample', name: 3, pairs: [] })
+      return result
     } catch (e) {
       if (e instanceof Error) {
         throw new HttpException(

@@ -1,4 +1,4 @@
-import { ActivityStatus, Member, MemberTask } from '../entities/Member'
+import { Member, MemberTask } from '../entities/Member'
 import { createRandomIdString } from '../../util/random'
 import { ITaskRepository } from 'src/app/repository-interface/task-repository'
 

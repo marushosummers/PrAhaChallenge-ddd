@@ -8,7 +8,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
 } from '@nestjs/common'
 import { ApiResponse } from '@nestjs/swagger'
 import { GetMemberResponse } from './response/get-member-response'
@@ -23,7 +22,7 @@ import { TaskRepository } from 'src/infra/db/repository/task-repository'
 import { PatchMemberTaskRequest } from './request/patch-member-task-request'
 import { UpdateMemberTaskUseCase } from 'src/app/update-member-task-usecase'
 import { DeleteMemberUseCase } from 'src/app/delete-member-usecase'
-import { PutMemberRequest } from './request/put-member-request'
+import { PatchMemberRequest } from './request/put-member-request'
 import { UpdateMemberUseCase } from 'src/app/update-member-usecase'
 import { TeamRepository } from 'src/infra/db/repository/team-repository'
 
@@ -78,23 +77,24 @@ export class MemberController {
     }
   }
 
-  @Put('/:id')
+  @Patch('/:id')
   @ApiResponse({ status: 200, type: Member })
   @ApiResponse({ status: 500 })
-  async PutMember(
+  async putMember(
     @Param('id') id: string,
-    @Body() putMemberDTO: PutMemberRequest,
+    @Body() patchMemberDTO: PatchMemberRequest,
   ): Promise<Member> {
     const prisma = new PrismaClient()
     const memberRepo = new MemberRepository(prisma)
-    const usecase = new UpdateMemberUseCase(memberRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new UpdateMemberUseCase(memberRepo, teamRepo)
 
     try {
       const member = await usecase.do({
         id: id,
-        name: putMemberDTO.name,
-        email: putMemberDTO.email,
-        activityStatus: putMemberDTO.activityStatus,
+        name: patchMemberDTO.name,
+        email: patchMemberDTO.email,
+        activityStatus: patchMemberDTO.activityStatus,
       })
       return member
     } catch (e) {
@@ -121,7 +121,7 @@ export class MemberController {
   @Patch('/:id/task/:memberTaskId')
   @ApiResponse({ status: 200, type: Member })
   @ApiResponse({ status: 500 })
-  async PatchMemberTask(
+  async patchMemberTask(
     @Param('id') id: string,
     @Param('memberTaskId') memberTaskId: string,
     @Body() patchMemberTaskDTO: PatchMemberTaskRequest,

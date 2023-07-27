@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsEmail } from 'class-validator'
 import { ActivityStatus } from 'src/domain/entities/Member'
 
-export class PutMemberRequest {
+export class PatchMemberRequest {
   @ApiProperty()
   readonly name!: string
 

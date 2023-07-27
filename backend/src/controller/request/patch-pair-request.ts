@@ -3,8 +3,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty } from 'class-validator'
 
-export class PostTaskRequest {
+export class PatchPairRequest {
   @ApiProperty()
   @IsNotEmpty()
-  readonly content!: string
+  readonly teamId!: string
 }

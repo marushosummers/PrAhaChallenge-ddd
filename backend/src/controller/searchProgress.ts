@@ -9,7 +9,7 @@ import { PrismaClient } from '@prisma/client'
 export class SearchProgressController {
   @Get()
   @ApiResponse({ status: 200 })
-  async getTeam(
+  async getSearchProgress(
     @Query('taskIds') taskIds: string[], // TODO: Validation
     @Query('status') status: string, // TODO: enumにする
     @Query('cursor') cursor?: string, // TODO: enumにする
